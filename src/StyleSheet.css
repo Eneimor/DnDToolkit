@@ -1,0 +1,42 @@
+/**
+ * StyleSheet.css
+ *   Place in the same source directory as Main.java
+ *   Ensure that your build system copies this file to your build output directory.
+ */
+
+#headerLabel {
+    -fx-background-color: steelblue;
+    -fx-padding: 5px;
+}
+
+
+
+#MainMenu {
+    -fx-background-image: url("/dnd/resource/img/background.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+
+#CharMan {
+    -fx-background-color: coral;
+}
+
+.button {
+    -fx-font-size: 15px;
+    -fx-font-family: "Myanmar Text";
+    -fx-text-fill: #da9653;
+    -fx-font-weight: bold;
+    -fx-background-image: url("/dnd/resource/img/btn1-normal.png");
+}
+
+.button:hover {
+    -fx-background-image: url("/dnd/resource/img/btn1-hover.png");
+    -fx-text-fill: #e5b585;
+}
+
+#DMT {
+    -fx-background-image: url("/dnd/resource/img/oldpaperback.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
