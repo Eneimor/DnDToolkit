@@ -8,6 +8,8 @@ import javafx.scene.control.TableView;
 
 import dnd.model.Character;
 
+import java.sql.SQLException;
+
 public class CharManController {
     @FXML
     private TableView<Character> characterTableView;
@@ -30,21 +32,28 @@ public class CharManController {
     @FXML
     private Label idLab;
 
+
+
     public void initialize() {
+
+
         //Инициализация таблицы с именами персонажей
-        CharDAOImpl.getAll();
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        characterTableView.setItems(CharDAOImpl.getCharacterData());
+        if (nameColumn.getColumns().isEmpty()) {
+            characterTableView.getItems().clear();
+        }
+            CharDAOImpl.getAll();
+            nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+            characterTableView.setItems(CharDAOImpl.getCharacterData());
 
-        //Очистка дополнительной информации о персонаже
-        showCharacterDetails(null);
+            //Очистка дополнительной информации о персонаже
+            showCharacterDetails(null);
 
-        // Слушаем изменения выбора, и при изменении отображаем
-        // дополнительную информацию о персонаже.
-        characterTableView.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showCharacterDetails(newValue));
+            // Слушаем изменения выбора, и при изменении отображаем
+            // дополнительную информацию о персонаже.
+            characterTableView.getSelectionModel().selectedItemProperty().addListener(
+                    (observable, oldValue, newValue) -> showCharacterDetails(newValue));
 
-        
+
     }
 
     //Отображение в левой части приложения изменений в выборе персонажа
@@ -67,7 +76,6 @@ public class CharManController {
             idLab.setText("");
         }
     }
-
 
     @FXML
     void newChar(ActionEvent event) {

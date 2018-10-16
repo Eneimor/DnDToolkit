@@ -1,27 +1,35 @@
 package dnd.Utils;
 
 import java.sql.*;
-import java.util.Properties;
-import java.util.logging.Logger;
 
 public class Connect {
-
-    private String url;
+    private static Connection connection = null;
+    private static final String url = "jdbc:sqlite:dnddb.db";
 
     //приватный класс, обеспечивающий установление подключения
-    private Connection getConnection() {
-        Connection connection = null;
+    private static Connection getConnection() {
         try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:dnddb.db");
+            // создаем соединение к базе данных
+            connection = DriverManager.getConnection(url);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;
     }
 
-    // Получение экземпляра PrepareStatement
-    public PreparedStatement getPrepareStatement(String sql) {
+    //Закрытие соединения
+    public static void CloseConnection() throws SQLException {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Получение экземпляра PrepareStatement и SELECT
+    public PreparedStatement getSelectPrepareStatement(String sql) {
         PreparedStatement ps = null;
         try {
             ps = getConnection().prepareStatement(sql);
@@ -30,6 +38,22 @@ public class Connect {
         }
 
         return ps;
+    }
+
+    //Получение экземпляра PrepareStatement и UPDATE
+    public Statement getUpdatePrepareStatement(String sql) throws SQLException, ClassNotFoundException {
+        Statement s = null;
+        try {
+            s = getConnection().createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                s.close();
+            }
+        } CloseConnection();
+        return s;
     }
 
     //Закрытие PrepareStatement
@@ -42,6 +66,4 @@ public class Connect {
             }
         }
     }
-
-    //TODO Закрытие соединения
 }

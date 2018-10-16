@@ -19,8 +19,9 @@ public class CharDAOImpl{
     public static List<Character> getAll() {
         Connect connect = new Connect();
         List<Character> lst = new LinkedList<>();
-        PreparedStatement ps = connect.getPrepareStatement(SELECT_ALL_CHARACTERS);
+        PreparedStatement ps = connect.getSelectPrepareStatement(SELECT_ALL_CHARACTERS);
         try {
+            lst.removeAll(lst);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Character ch = new Character();
@@ -34,8 +35,11 @@ public class CharDAOImpl{
         } finally {
             connect.closePrepareStatement(ps);
 
+
         }
         return lst;
+
+
     }
 
     //метод, возвращающий список персонажей в виде наблюдаемого списка
@@ -52,7 +56,7 @@ public class CharDAOImpl{
     public static void delete(int id) {
         String sql = "DELETE FROM m_character WHERE id =" + id + ";";
         Connect connect = new Connect();
-        PreparedStatement ps = connect.getPrepareStatement(sql);
+        PreparedStatement ps = connect.getSelectPrepareStatement(sql);
         try {
             ps.executeUpdate();
         } catch (SQLException e) {

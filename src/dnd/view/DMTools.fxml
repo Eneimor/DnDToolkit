@@ -9,7 +9,7 @@
       <Button mnemonicParsing="false" onAction="#previousPane" prefHeight="55.0" prefWidth="200.0" text="Back" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
       <Button layoutX="14.0" layoutY="508.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" text="Misc" AnchorPane.leftAnchor="14.0" />
       <Button layoutX="14.0" layoutY="437.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" text="Rules" AnchorPane.leftAnchor="14.0" />
-      <Button layoutX="14.0" layoutY="368.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" text="Generators" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="368.0" />
+      <Button layoutX="14.0" layoutY="368.0" mnemonicParsing="false" onAction="#generatorsPane" prefHeight="55.0" prefWidth="200.0" text="Generators" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="368.0" />
       <Button layoutX="14.0" layoutY="299.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" text="Sound" AnchorPane.leftAnchor="14.0" />
       <Button layoutX="14.0" layoutY="228.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" text="Dungeons" AnchorPane.leftAnchor="14.0" />
       <Button layoutX="14.0" layoutY="157.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" text="Enviroment" AnchorPane.leftAnchor="14.0" />

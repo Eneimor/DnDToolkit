@@ -23,6 +23,13 @@ public class Navigator {
     public static final String SPELLS = "dnd/view/Spellbook.fxml";
     public static final String DR = "dnd/view/DiceRoller.fxml";
     public static final String NCH = "dnd/view/NewChar.fxml";
+    public static final String GENERATORS = "dnd/view/Generators.fxml";
+    public static final String ENCOUNTERS = "dnd/view/Generators.fxml";
+    public static final String ENVIRONMENT = "dnd/view/Generators.fxml";
+    public static final String DUNGEONS = "dnd/view/Generators.fxml";
+    public static final String SOUNDS = "dnd/view/Generators.fxml";
+    public static final String RULES = "dnd/view/Generators.fxml";
+    public static final String MISC = "dnd/view/Generators.fxml";
 
     /** Главный контроллер слоев */
     private static MainController mainController;
