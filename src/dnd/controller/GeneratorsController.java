@@ -1,74 +1,200 @@
-package dnd.controller;
-
+import dnd.Utils.Connect;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class GeneratorsController {
+    @FXML
+    private Label txtlabel;
 
     @FXML
-    private ChoiceBox Gens;
+    private ChoiceBox chb;
+
     @FXML
-    private Pane GenPane1;
+    private ChoiceBox shChb;
+
     @FXML
-    private Pane GenPane2;
+    private ChoiceBox placeid;
+
     @FXML
-    private Pane GenPane3;
-    @FXML
-    private Pane GenPane4;
-    @FXML
-    private Pane GenPane5;
+    private Pane generatorPane1;
+
+    ObservableList<String> rumors = FXCollections.observableArrayList();
+    ObservableList<String> genChb2 = FXCollections.observableArrayList();
 
 
-    ObservableList<String> GeneratorList = FXCollections
-            .observableArrayList("GenPane1", "Generator 2", "Generator 3", "Generator 4", "Generator 5",
-                    "Generator 6", "Generator 7");
-    /*
-    private void setVis()  {
-        GenPane1.setVisible(false);
-        GenPane2.setVisible(false);
-        GenPane3.setVisible(false);
+    public static final String sql1 = "SELECT rumor FROM gens WHERE ";
+    public static final String sqlEnd = "ORDER BY RANDOM() LIMIT 1";
+    public static final String sql2 = "SELECT DISTINCT genname FROM gens";
+    public static final String sql3 = "SELECT DISTINCT place FROM gens WHERE genname = ";
+    public static final String sql8 = "SELECT DISTINCT dopcol FROM gens WHERE genname = ";
+    public static final String sql = "SELECT rumor FROM gens ORDER BY RANDOM() LIMIT 1"; //общий запрос
 
-    }
-    */
-    @FXML
-    private void initialize() {
-        GenPane1.setVisible(false);
-        Gens.setValue("Choose generator...");
-        Gens.setItems(GeneratorList);
-        Gens.valueProperty().addListener(new ChangeListener() {
+    ObservableList<String> genChb = FXCollections.observableArrayList();
+
+    public void initialize() {
+        Connect connect = new Connect();
+        PreparedStatement ps1 = connect.getPreparedStatement(sql2);
+        try {
+            ResultSet rs2 = ps1.executeQuery();
+            while (rs2.next()) {
+                genChb.add(rs2.getString("genname"));
+            }
+            chb.setItems(genChb);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        generatorPane1.setVisible(false);
+        //TODO: Переделать слушатель для ChoiceBox. Больше унифицированности!
+        chb.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (newValue.equals("Generator 1")) {
-                    GenPane1.setVisible(true);
-                }
-                else {
-                    GenPane1.setVisible(false);
+                String nVal = (String) chb.getValue();
+                //Это рабочий вариант. Сохрани
+                if (newValue.equals(nVal)) {
+                    PreparedStatement ps3 = connect.getPreparedStatement(sql3 + "\"" + nVal + "\"");
+                    PreparedStatement ps99 = connect.getPreparedStatement(sql8 + "\"" + nVal + "\" AND dopcol IS NOT NULL");
+                    if (placeid.getItems().isEmpty()) {
+                        try {
+                            ResultSet rs3 = ps3.executeQuery();
+                            ResultSet rs99 = ps99.executeQuery();
+                            while (rs3.next()) {
+                                rumors.add(rs3.getString("place"));
+                                System.out.println(rumors);
+                            }
+                            placeid.setItems(rumors);
+                            if (!rs99.isClosed()) {
+                                if (shChb.getItems().isEmpty()) {
+                                    shChb.setDisable(false);
+                                    shChb.setVisible(true);
+                                    while (rs99.next()) {
+                                        genChb2.add(rs99.getString("dopcol"));
+                                        System.out.println(genChb2);
+                                    }
+                                } else {
+                                    shChb.setDisable(false);
+                                    shChb.setVisible(true);
+                                    genChb2.clear();
+                                    while (rs99.next()) {
+                                        genChb2.add(rs99.getString("dopcol"));
+                                        System.out.println(genChb2);
+                                    }
+                                }
+                            } else {
+                                shChb.setDisable(true);
+                                shChb.setVisible(false);
+                            }
+                            shChb.setItems(genChb2);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        rumors.clear();
+                        try {
+                            ResultSet rs3 = ps3.executeQuery();
+                            ResultSet rs99 = ps99.executeQuery();
+                            while (rs3.next()) {
+                                rumors.add(rs3.getString("place"));
+                                System.out.println(rumors);
+                            }
+                            placeid.setItems(rumors);
+                            if (!rs99.isClosed()) {
+                                if (shChb.getItems().isEmpty()) {
+                                    shChb.setDisable(false);
+                                    shChb.setVisible(true);
+                                    while (rs99.next()) {
+                                        genChb2.add(rs99.getString("dopcol"));
+                                        System.out.println(genChb2);
+                                    }
+                                } else {
+                                    genChb2.clear();
+                                    shChb.setDisable(false);
+                                    shChb.setVisible(true);
+                                    while (rs99.next()) {
+                                        genChb2.add(rs99.getString("dopcol"));
+                                        System.out.println(genChb2);
+                                    }
+                                }
+                            } else {
+                                shChb.setDisable(true);
+                                shChb.setVisible(false);
+                            }
+                            shChb.setItems(genChb2);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    generatorPane1.setVisible(true);
                 }
             }
         });
-
-        //Gens.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-          //  @Override
-            //public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-              //  System.out.println(Gens.getItems().get((Integer) number2));
-                //GenPane1.setVisible(true);
-         //   }
-       // });
     }
 
-
-
-
-
-
-
+    //Кнопка дя генерации
+    //TODO: Сделать условия для кнопки генерации
     @FXML
-    private void handleRoll(ActionEvent actionEvent) throws Exception {}
+    private void handleGenerate(ActionEvent actionEvent) throws Exception {
+        try {
+            String gen = (String) chb.getValue();
+            String place = (String) placeid.getValue();
+            String dop = (String) shChb.getValue();
+            boolean shChbIsEmpty = (shChb.getValue() == null);
 
+            Connect connect = new Connect();
+
+
+            //Если второй чб активен
+            if (gen.equals(gen) && !shChb.isDisable()) {
+                //если чб1 и чб2 выбраны
+                if (place.equals(place) && dop.equals(dop)) {
+                    PreparedStatement ps4 = connect.getPreparedStatement(sql1 + "genname = \"" + gen + "\" AND place = \"" + place + "\" AND dopcol = \"" + dop + "\"" + sqlEnd);
+                    try {
+                        ResultSet rs = ps4.executeQuery();
+                        txtlabel.setText(rs.getString("rumor"));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+            //Если второй чб не активен
+            if (gen.equals(gen) && shChb.isDisable()) {
+                //если чб 1 выбран
+                if (place.equals(place)) {
+                    PreparedStatement ps4 = connect.getPreparedStatement(sql1 + "genname = \"" + gen + "\" AND place = \"" + place + "\"" + sqlEnd);
+                    try {
+                        ResultSet rs = ps4.executeQuery();
+                        txtlabel.setText(rs.getString("rumor"));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //если чб1 не выбран
+
+            }
+
+        } catch (NullPointerException e) {
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("Внимание");
+            a.setHeaderText("Ошибка!");
+            a.setContentText("Выберите все условия");
+            a.showAndWait();
+        }
+    }
+    @FXML
+    void previousPane(ActionEvent event) {
+        Navigator.loadScreen(Navigator.DMT);
+    }
 }

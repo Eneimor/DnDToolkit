@@ -5,7 +5,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import dnd.model.Character;
-import dnd.controller.*;
 
 public class NewCharController {
     DR dr = new DR();

@@ -38,7 +38,7 @@ public class CharManController {
 
 
         //Инициализация таблицы с именами персонажей
-        if (nameColumn.getColumns().isEmpty()) {
+        if (!nameColumn.getColumns().isEmpty()) {
             characterTableView.getItems().clear();
         }
             CharDAOImpl.getAll();

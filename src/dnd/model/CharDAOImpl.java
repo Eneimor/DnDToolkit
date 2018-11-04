@@ -12,14 +12,17 @@ public class CharDAOImpl{
     public static final String SELECT_ALL_CHARACTERS = "SELECT a.id as id, a.name as name, b.name as class FROM m_character as a " +
             "left join cl_class as b ON a.[class] = b.id";
 
+
     //Обсервабл лист для отображения в TableView списка персонажей
     private static ObservableList<Character> characterData = FXCollections.observableArrayList();
+    //Наблюдаемый список для отображения списка генераторов
+    private static ObservableList<String> GeneratorData = FXCollections.observableArrayList();
 
     //Наполняем наблюдаемй список результатом запроса
     public static List<Character> getAll() {
         Connect connect = new Connect();
         List<Character> lst = new LinkedList<>();
-        PreparedStatement ps = connect.getSelectPrepareStatement(SELECT_ALL_CHARACTERS);
+        PreparedStatement ps = connect.getPreparedStatement(SELECT_ALL_CHARACTERS);
         try {
             lst.removeAll(lst);
             ResultSet rs = ps.executeQuery();
@@ -34,18 +37,17 @@ public class CharDAOImpl{
             e.printStackTrace();
         } finally {
             connect.closePrepareStatement(ps);
-
-
+            //TODO сделать так чтобы второй раз не подгружался список
         }
         return lst;
-
-
     }
+
 
     //метод, возвращающий список персонажей в виде наблюдаемого списка
     public static ObservableList<Character> getCharacterData() {
         return characterData;
     }
+
 
 
 
@@ -56,7 +58,7 @@ public class CharDAOImpl{
     public static void delete(int id) {
         String sql = "DELETE FROM m_character WHERE id =" + id + ";";
         Connect connect = new Connect();
-        PreparedStatement ps = connect.getSelectPrepareStatement(sql);
+        PreparedStatement ps = connect.getPreparedStatement(sql);
         try {
             ps.executeUpdate();
         } catch (SQLException e) {

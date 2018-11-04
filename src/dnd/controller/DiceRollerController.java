@@ -33,7 +33,7 @@ public class DiceRollerController {
         TypeOfDices.setValue("D4");
         TypeOfDices.setItems(TypeOfDicesList);
         SpinnerValueFactory<Integer> diceValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1);
-        SpinnerValueFactory<Integer> modsValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,100,1);
+        SpinnerValueFactory<Integer> modsValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,100,0);
         this.numOfDices.setValueFactory(diceValueFactory);
         this.mods.setValueFactory(modsValueFactory);
     }

@@ -29,7 +29,7 @@ public class Connect {
     }
 
     // Получение экземпляра PrepareStatement и SELECT
-    public PreparedStatement getSelectPrepareStatement(String sql) {
+    public PreparedStatement getPreparedStatement(String sql) {
         PreparedStatement ps = null;
         try {
             ps = getConnection().prepareStatement(sql);
@@ -40,27 +40,23 @@ public class Connect {
         return ps;
     }
 
-    //Получение экземпляра PrepareStatement и UPDATE
-    public Statement getUpdatePrepareStatement(String sql) throws SQLException, ClassNotFoundException {
-        Statement s = null;
-        try {
-            s = getConnection().createStatement();
-            s.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                s.close();
-            }
-        } CloseConnection();
-        return s;
-    }
 
     //Закрытие PrepareStatement
     public void closePrepareStatement(PreparedStatement st) {
         if (st != null) {
             try {
                 st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //Закрытие соединения
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                getConnection().close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
