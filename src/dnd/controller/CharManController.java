@@ -1,4 +1,7 @@
+import dnd.Utils.Connect;
 import dnd.model.CharDAOImpl;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -8,6 +11,8 @@ import javafx.scene.control.TableView;
 
 import dnd.model.Character;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CharManController {
@@ -32,29 +37,44 @@ public class CharManController {
     @FXML
     private Label idLab;
 
+    //Обсервабл лист для отображения в TableView списка персонажей
+    private static ObservableList<Character> characterData = FXCollections.observableArrayList();
+    public static final String SELECT_ALL_CHARACTERS = "SELECT a.id as id, a.name as name, b.name as class FROM m_character as a " +
+            "left join cl_class as b ON a.[class] = b.id";
+    public static final String sql;
+
+    static {
+        sql = "DELETE FROM m_character WHERE id =";
+    }
 
 
     public void initialize() {
-
-
         //Инициализация таблицы с именами персонажей
-        if (!nameColumn.getColumns().isEmpty()) {
-            characterTableView.getItems().clear();
+        Connect connect = new Connect();
+        PreparedStatement ps = connect.getPreparedStatement(SELECT_ALL_CHARACTERS);
+        if (nameColumn.getColumns().isEmpty()) {
+            characterData.clear();
         }
-            CharDAOImpl.getAll();
-            nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-            characterTableView.setItems(CharDAOImpl.getCharacterData());
-
-            //Очистка дополнительной информации о персонаже
-            showCharacterDetails(null);
-
-            // Слушаем изменения выбора, и при изменении отображаем
-            // дополнительную информацию о персонаже.
-            characterTableView.getSelectionModel().selectedItemProperty().addListener(
-                    (observable, oldValue, newValue) -> showCharacterDetails(newValue));
+            try {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Character ch = new Character();
+                    ch.setId(rs.getInt("id"));
+                    ch.setName(rs.getString("name"));
+                    ch.setChClass(rs.getString("class"));
+                    characterData.add(ch);
 
 
-    }
+                }
+                nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+                characterTableView.setItems(characterData);
+                showCharacterDetails(null);
+                characterTableView.getSelectionModel().selectedItemProperty().addListener(
+                        (observable, oldValue, newValue) -> showCharacterDetails(newValue));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     //Отображение в левой части приложения изменений в выборе персонажа
     private void showCharacterDetails(Character character) {
@@ -87,7 +107,6 @@ public class CharManController {
         CharDAOImpl.delete(Integer.parseInt(idLab.getText()));
         int selectedIndex = characterTableView.getSelectionModel().getSelectedIndex();
         characterTableView.getItems().remove(selectedIndex);
-
     }
 
 

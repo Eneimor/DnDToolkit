@@ -56,7 +56,6 @@ public class GeneratorsController {
             e.printStackTrace();
         }
         generatorPane1.setVisible(false);
-        //TODO: Переделать слушатель для ChoiceBox. Больше унифицированности!
         chb.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -71,7 +70,6 @@ public class GeneratorsController {
                             ResultSet rs99 = ps99.executeQuery();
                             while (rs3.next()) {
                                 rumors.add(rs3.getString("place"));
-                                System.out.println(rumors);
                             }
                             placeid.setItems(rumors);
                             if (!rs99.isClosed()) {
@@ -80,7 +78,6 @@ public class GeneratorsController {
                                     shChb.setVisible(true);
                                     while (rs99.next()) {
                                         genChb2.add(rs99.getString("dopcol"));
-                                        System.out.println(genChb2);
                                     }
                                 } else {
                                     shChb.setDisable(false);
@@ -88,7 +85,6 @@ public class GeneratorsController {
                                     genChb2.clear();
                                     while (rs99.next()) {
                                         genChb2.add(rs99.getString("dopcol"));
-                                        System.out.println(genChb2);
                                     }
                                 }
                             } else {
@@ -106,7 +102,6 @@ public class GeneratorsController {
                             ResultSet rs99 = ps99.executeQuery();
                             while (rs3.next()) {
                                 rumors.add(rs3.getString("place"));
-                                System.out.println(rumors);
                             }
                             placeid.setItems(rumors);
                             if (!rs99.isClosed()) {
@@ -115,7 +110,6 @@ public class GeneratorsController {
                                     shChb.setVisible(true);
                                     while (rs99.next()) {
                                         genChb2.add(rs99.getString("dopcol"));
-                                        System.out.println(genChb2);
                                     }
                                 } else {
                                     genChb2.clear();
@@ -123,7 +117,6 @@ public class GeneratorsController {
                                     shChb.setVisible(true);
                                     while (rs99.next()) {
                                         genChb2.add(rs99.getString("dopcol"));
-                                        System.out.println(genChb2);
                                     }
                                 }
                             } else {
@@ -149,11 +142,8 @@ public class GeneratorsController {
             String gen = (String) chb.getValue();
             String place = (String) placeid.getValue();
             String dop = (String) shChb.getValue();
-            boolean shChbIsEmpty = (shChb.getValue() == null);
 
             Connect connect = new Connect();
-
-
             //Если второй чб активен
             if (gen.equals(gen) && !shChb.isDisable()) {
                 //если чб1 и чб2 выбраны
@@ -168,7 +158,6 @@ public class GeneratorsController {
                 }
             }
 
-
             //Если второй чб не активен
             if (gen.equals(gen) && shChb.isDisable()) {
                 //если чб 1 выбран
@@ -181,10 +170,7 @@ public class GeneratorsController {
                         e.printStackTrace();
                     }
                 }
-                //если чб1 не выбран
-
             }
-
         } catch (NullPointerException e) {
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setTitle("Внимание");
@@ -193,6 +179,7 @@ public class GeneratorsController {
             a.showAndWait();
         }
     }
+
     @FXML
     void previousPane(ActionEvent event) {
         Navigator.loadScreen(Navigator.DMT);

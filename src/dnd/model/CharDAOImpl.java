@@ -1,56 +1,11 @@
 package dnd.model;
 
 import dnd.Utils.Connect;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public class CharDAOImpl{
-    public static final String SELECT_ALL_CHARACTERS = "SELECT a.id as id, a.name as name, b.name as class FROM m_character as a " +
-            "left join cl_class as b ON a.[class] = b.id";
-
-
-    //Обсервабл лист для отображения в TableView списка персонажей
-    private static ObservableList<Character> characterData = FXCollections.observableArrayList();
-    //Наблюдаемый список для отображения списка генераторов
-    private static ObservableList<String> GeneratorData = FXCollections.observableArrayList();
-
-    //Наполняем наблюдаемй список результатом запроса
-    public static List<Character> getAll() {
-        Connect connect = new Connect();
-        List<Character> lst = new LinkedList<>();
-        PreparedStatement ps = connect.getPreparedStatement(SELECT_ALL_CHARACTERS);
-        try {
-            lst.removeAll(lst);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Character ch = new Character();
-                ch.setId(rs.getInt("id"));
-                ch.setName(rs.getString("name"));
-                ch.setChClass(rs.getString("class"));
-                characterData.add(ch);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            connect.closePrepareStatement(ps);
-            //TODO сделать так чтобы второй раз не подгружался список
-        }
-        return lst;
-    }
-
-
-    //метод, возвращающий список персонажей в виде наблюдаемого списка
-    public static ObservableList<Character> getCharacterData() {
-        return characterData;
-    }
-
-
-
-
+public class CharDAOImpl {
     public void insert(Character character) {
         //TODO сделать метод INSERT
     }
