@@ -12,7 +12,7 @@
 
 
 #MainMenu {
-    -fx-background-image: url("/dnd/resource/img/background.jpg");
+    -fx-background-image: url("/dnd/resource/img/background.gif");
     -fx-background-size: cover;
     -fx-background-position: center center;
 }
