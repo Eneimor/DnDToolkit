@@ -66,7 +66,14 @@ public class SpellManController {
     @FXML private ChoiceBox levelChoice;
 
 
-    private final String sql = "SELECT id, name, casttime, distance, components, duration, description, lvl FROM spellbook ORDER BY name";
+    private final String sql = "SELECT a.id as id, spellname, c.casttype as casttype, d.distance as distance, \n" +
+            "b.components as components, e.name as duration, description, spelllvl \n" +
+            "FROM cl_spells a \n" +
+            "LEFT JOIN sp_components b ON a.id = b.spellid\n" +
+            "LEFT JOIN sp_casttimetype c ON a.spellcasttimetype = c.id\n" +
+            "LEFT JOIN sp_distance d ON a.spelldistance = d.id\n" +
+            "LEFT JOIN sp_durationtype e ON a.spelldurationtype = e.id\n" +
+            "ORDER BY spellname";
 
     private static ObservableList<Spellbook> spellbookData = FXCollections.observableArrayList();
 
@@ -91,13 +98,13 @@ public class SpellManController {
             while (rs.next()){
                 Spellbook sb = new Spellbook();
                 sb.setId(rs.getInt("id"));
-                sb.setName(rs.getString("name"));
-                sb.setCasttime(rs.getString("casttime"));
+                sb.setName(rs.getString("spellname"));
+                sb.setCasttime(rs.getString("casttype"));
                 sb.setDistance(rs.getString("distance"));
                 sb.setComponents(rs.getString("components"));
                 sb.setDuration(rs.getString("duration"));
                 sb.setDescription(rs.getString("description"));
-                sb.setLvl(rs.getInt("lvl"));
+                sb.setLvl(rs.getInt("spelllvl"));
                 spellbookData.add(sb);
             }
             while (rs1.next()) {

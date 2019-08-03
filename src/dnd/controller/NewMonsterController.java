@@ -55,8 +55,8 @@ public class NewMonsterController {
         SpinnerValueFactory<Integer> hpValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 9);
         SpinnerValueFactory<Integer> crValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 30, 1);
         Connect c = new Connect();
-        PreparedStatement ps1 = c.getPreparedStatement("SELECT DISTINCT name FROM cl_alignment");
-        PreparedStatement ps2 = c.getPreparedStatement("SELECT DISTINCT name FROM cl_alignment");
+        PreparedStatement ps1 = c.getPreparedStatement("SELECT DISTINCT alignname FROM cl_alignment");
+        PreparedStatement ps2 = c.getPreparedStatement("SELECT DISTINCT alignname FROM cl_alignment");
         try {
             ResultSet rs1 = ps1.executeQuery();
             while (rs1.next()) {

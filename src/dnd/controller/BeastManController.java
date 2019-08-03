@@ -49,6 +49,8 @@ public class BeastManController {
 
     @FXML private Label idLabel;
 
+    //TODO: ПОПРАВИТЬ ВЫБОРКУ
+
     private final String sqlAll = "SELECT id, locName, MSize, MType, Align, AC, HP, hpDice, speed, " +
             "str,dex,con,intl,wis,cha,sThr,skills,damVul,damRes,damImm,condImm,senses,langs,challenge " +
             "FROM cl_monstrum ORDER BY locName";
