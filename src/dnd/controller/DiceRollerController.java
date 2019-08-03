@@ -13,6 +13,7 @@ import dnd.Utils.SpriteAnimation;
 import dnd.Utils.DR;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class DiceRollerController {
@@ -50,6 +51,8 @@ public class DiceRollerController {
     //Создание Imageview и спрайтовой анимации
     @FXML
     private ImageView imgvw;
+    @FXML private Button lootGen;
+    @FXML private ListView testLoot;
 
     private static final int COLUMNS = 3;
     private static final int COUNT = 3;
@@ -57,6 +60,21 @@ public class DiceRollerController {
     private static final int OFFSET_Y = 32;
     private static final int WIDTH = 32;
     private static final int HEIGHT = 32;
+
+
+
+
+    @FXML
+    private void handleGenLoot(ActionEvent actionEvent) throws Exception {
+        ObservableList<Integer> lootData = FXCollections.observableArrayList();
+        Random rnd = new Random();
+        int cnt = rnd.nextInt(15);
+        for (int i = 0; i < cnt; i++) {
+            lootData.add(i);
+        }
+        testLoot.setItems(lootData);
+
+    }
 
 
     //Метод, совершающий ролл

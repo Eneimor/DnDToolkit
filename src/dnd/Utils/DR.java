@@ -40,4 +40,6 @@ public class DR {
             chars[j] = sum;
         }
     }
+
+
 }

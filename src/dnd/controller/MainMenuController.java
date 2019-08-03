@@ -1,10 +1,7 @@
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
-import javax.print.attribute.standard.Media;
 
 /**
  * Контроллер для главного меню.

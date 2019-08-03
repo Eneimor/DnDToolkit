@@ -30,7 +30,7 @@ public class DMTController {
 
     @FXML
     void DungeonPane(ActionEvent event) {
-        Navigator.loadScreen(Navigator.DUNGEONS);
+        Navigator.loadScreen(Navigator.GENERS);
     }
 
     @FXML
