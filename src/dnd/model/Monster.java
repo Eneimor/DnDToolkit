@@ -21,10 +21,15 @@ public class Monster {
     private final IntegerProperty intl;
     private final IntegerProperty wis;
     private final IntegerProperty cha;
+    private final IntegerProperty svStr;
+    private final IntegerProperty svDex;
+    private final IntegerProperty svCon;
+    private final IntegerProperty svInt;
+    private final IntegerProperty svWis;
+    private final IntegerProperty svCha;
     /*
 
 
-    private final StringProperty st;
     private final StringProperty skills;
     private final StringProperty damVul;
     private final StringProperty damRes;
@@ -38,13 +43,14 @@ public class Monster {
 
 
     public Monster() {this(0,null,null,null,null, null, 0, null,
-            null, 0, 0, 0, 0, 0, 0);}
+            null, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0);}
             /*
             null,null, null, null, null,
             null, null, null, 0);}
 */
     public Monster(int id, String locName, String mSize, String mType, String align, String ac, int hp, String hpDice,
-                   String speed, int str, int dex, int con, int intl, int wis, int cha
+                   String speed, int str, int dex, int con, int intl, int wis, int cha, int svStr, int svDex, int svCon,
+                   int svInt, int svWis, int svCha
                    /*
                    , String st, String skills,
                    String damVul, String damRes, String damImm, String condImm, String senses, String langs,
@@ -66,9 +72,15 @@ public class Monster {
         this.intl = new SimpleIntegerProperty(intl);
         this.wis = new SimpleIntegerProperty(wis);
         this.cha = new SimpleIntegerProperty(cha);
+        this.svStr = new SimpleIntegerProperty(str);
+        this.svDex = new SimpleIntegerProperty(dex);
+        this.svCon = new SimpleIntegerProperty(con);
+        this.svInt = new SimpleIntegerProperty(intl);
+        this.svWis = new SimpleIntegerProperty(wis);
+        this.svCha = new SimpleIntegerProperty(cha);
         /*
 
-        this.st = new SimpleStringProperty(st);
+
         this.skills = new SimpleStringProperty(skills);
         this.damVul = new SimpleStringProperty(damVul);
         this.damRes = new SimpleStringProperty(damRes);
@@ -122,38 +134,60 @@ public class Monster {
     public int getStr() {return str.get();}
     public void setStr(int str) {this.str.set(str);}
     public IntegerProperty strProperty() {return str;}
-
     //ловкость
     public int getDex() {return dex.get();}
     public void setDex(int dex) {this.dex.set(dex);}
     public IntegerProperty dexProperty() {return dex;}
-
     //телосложение
     public int getCon() {return con.get();}
     public void setCon(int con) {this.con.set(con);}
     public IntegerProperty conProperty() {return con;}
-
     //интеллект
     public int getIntl() {return intl.get();}
     public void setIntl(int intl) {this.intl.set(intl);}
     public IntegerProperty intlProperty() {return intl;}
-
     //мудрость
     public int getWis() {return wis.get();}
     public void setWis(int wis) {this.wis.set(wis);}
     public IntegerProperty wisProperty() {return wis;}
-
     //харизма
     public int getCha() {return cha.get();}
     public void setCha(int cha) {this.cha.set(cha);}
     public IntegerProperty chaProperty() {return cha;}
+
+    //спассброски
+    public int getSvStr() {return svStr.get();}
+    public void setSvStr(int svStr) {this.svStr.set(svStr);}
+    public IntegerProperty svStrProperty() {return svStr;}
+
+    public int getSvDex() {return svDex.get();}
+    public void setSvDex(int svDex) {this.svDex.set(svDex);}
+    public IntegerProperty svDexProperty() {return svDex;}
+
+    public int getSvCon() {return svCon.get();}
+    public void setSvCon(int svCon) {this.svCon.set(svCon);}
+    public IntegerProperty svConProperty() {return svCon;}
+
+    public int getSvIntl() {return svInt.get();}
+    public void setSvIntl(int svInt) {this.svInt.set(svInt);}
+    public IntegerProperty svIntProperty() {return svInt;}
+
+    public int getSvWis() {return svWis.get();}
+    public void setSvWis(int svWis) {this.svWis.set(svWis);}
+    public IntegerProperty svWisProperty() {return svWis;}
+
+    public int getSvCha() {return svCha.get();}
+    public void setSvCha(int svCha) {this.svCha.set(svCha);}
+    public IntegerProperty svChaProperty() {return svCha;}
+
+
+
+
+
+
     /*
 
 
-
-    public String getST() { return st.get();}
-    public void setST(String st) {this.st.set(st);}
-    public StringProperty stProperty() {return st;}
 
     public String getSkills() { return skills.get();}
     public void setSkills(String skills) {this.skills.set(skills);}

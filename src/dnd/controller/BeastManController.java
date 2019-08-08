@@ -36,11 +36,16 @@ public class BeastManController {
     @FXML private Label intModModLabel;
     @FXML private Label wisModLabel;
     @FXML private Label chaModLabel;
+    @FXML private Label svStrLabel;
+    @FXML private Label svDexLabel;
+    @FXML private Label svConLabel;
+    @FXML private Label svIntLabel;
+    @FXML private Label svWisLabel;
+    @FXML private Label svChaLabel;
     /*
 
 
 
-    @FXML private Label STLable;
     @FXML private Label skillLabel;
     @FXML private Label damVulLabel;
     @FXML private Label damResLabel;
@@ -65,7 +70,8 @@ public class BeastManController {
             "a.hp,\n" +
             "a.hpdice,\n" +
             "a.speed,\n" +
-            "str,dex,con,intl,wis,cha\n" +
+            "str,dex,con,intl,wis,cha,\n" +
+            "svstr,svdex,svcon,svintl,svwis,svcha\n" +
             "FROM cl_monstrum a\n" +
             "INNER JOIN cl_monstrtype b ON a.monstertype = b.id\n" +
             "INNER JOIN cl_size c ON a.monstersize = c.id\n" +
@@ -95,11 +101,15 @@ public class BeastManController {
                 m.setIntl(rs.getInt("intl"));
                 m.setWis(rs.getInt("wis"));
                 m.setCha(rs.getInt("cha"));
+                m.setSvStr(rs.getInt("svstr")));
+                m.setSvDex(rs.getInt("svdex"));
+                m.setSvCon(rs.getInt("svcon"));
+                m.setSvIntl(rs.getInt("svintl"));
+                m.setSvWis(rs.getInt("svwis"));
+                m.setSvCha(rs.getInt("svcha"));
                 /*
 
 
-
-                m.setST(rs.getString("sThr"));
                 m.setSkills(rs.getString("skills"));
                 m.setDamVul(rs.getString("damVul"));
                 m.setDamRes(rs.getString("damRes"));
@@ -160,6 +170,15 @@ public class BeastManController {
             intModModLabel.setText(String.valueOf(g.setMod(monster.getIntl())));
             wisModLabel.setText(String.valueOf(g.setMod(monster.getWis())));
             chaModLabel.setText(String.valueOf(g.setMod(monster.getCha())));
+            //TODO: сделать, чтобы если спабросок = 0, то пустое значение
+            svStrLabel.setText(String.valueOf(monster.getSvStr()));
+            svDexLabel.setText(String.valueOf(monster.getSvDex()));
+            svConLabel.setText(String.valueOf(monster.getSvCon()));
+            svIntLabel.setText(String.valueOf(monster.getSvIntl()));
+            svWisLabel.setText(String.valueOf(monster.getSvWis()));
+            svChaLabel.setText(String.valueOf(monster.getSvCha()));
+
+
 
             /*
 
@@ -194,6 +213,12 @@ public class BeastManController {
             intModModLabel.setText("");
             wisModLabel.setText("");
             chaModLabel.setText("");
+            svStrLabel.setText("");
+            svDexLabel.setText("");
+            svConLabel.setText("");
+            svIntLabel.setText("");
+            svWisLabel.setText("");
+            svChaLabel.setText("");
             /*
 
 
