@@ -36,6 +36,10 @@ public class BeastManController {
     @FXML private Label intModModLabel;
     @FXML private Label wisModLabel;
     @FXML private Label chaModLabel;
+    /*
+
+
+
     @FXML private Label STLable;
     @FXML private Label skillLabel;
     @FXML private Label damVulLabel;
@@ -45,15 +49,27 @@ public class BeastManController {
     @FXML private Label sensesLabel;
     @FXML private Label langLabel;
     @FXML private Label challengeLabel;
+    */
 
 
     @FXML private Label idLabel;
 
     //TODO: ПОПРАВИТЬ ВЫБОРКУ
 
-    private final String sqlAll = "SELECT id, locName, MSize, MType, Align, AC, HP, hpDice, speed, " +
-            "str,dex,con,intl,wis,cha,sThr,skills,damVul,damRes,damImm,condImm,senses,langs,challenge " +
-            "FROM cl_monstrum ORDER BY locName";
+    private final String sqlAll = "SELECT a.id,\n" +
+            "a.locname,\n" +
+            "b.name as type, \n" +
+            "c.sizeName as size,\n" +
+            "d.alignName as align,\n" +
+            "a.actype,\n" +
+            "a.hp,\n" +
+            "a.hpdice,\n" +
+            "a.speed,\n" +
+            "str,dex,con,intl,wis,cha\n" +
+            "FROM cl_monstrum a\n" +
+            "INNER JOIN cl_monstrtype b ON a.monstertype = b.id\n" +
+            "INNER JOIN cl_size c ON a.monstersize = c.id\n" +
+            "INNER JOIN cl_alignment d ON a.align = d.id";
 
     private static ObservableList<Monster> monsterData = FXCollections.observableArrayList();
 
@@ -66,11 +82,11 @@ public class BeastManController {
                 Monster m = new Monster();
                 m.setId(rs.getInt("id"));
                 m.setLocName(rs.getString("locName"));
-                m.setSize(rs.getInt("MSize"));
-                m.setType(rs.getString("MType"));
-                m.setAlign(rs.getInt("Align"));
-                m.setAC(rs.getString("AC"));
-                m.setHP(rs.getInt("HP"));
+                m.setSize(rs.getString("size"));
+                m.setType(rs.getString("type"));
+                m.setAlign(rs.getString("align"));
+                m.setAC(rs.getString("acType"));
+                m.setHP(rs.getInt("hp"));
                 m.setHPDice(rs.getString("hpDice"));
                 m.setSpeed(rs.getString("speed"));
                 m.setStr(rs.getInt("str"));
@@ -79,6 +95,10 @@ public class BeastManController {
                 m.setIntl(rs.getInt("intl"));
                 m.setWis(rs.getInt("wis"));
                 m.setCha(rs.getInt("cha"));
+                /*
+
+
+
                 m.setST(rs.getString("sThr"));
                 m.setSkills(rs.getString("skills"));
                 m.setDamVul(rs.getString("damVul"));
@@ -88,6 +108,7 @@ public class BeastManController {
                 m.setSenses(rs.getString("senses"));
                 m.setLangs(rs.getString("langs"));
                 m.setChallenge(rs.getInt("challenge"));
+                */
                 monsterData.add(m);
             }
         } catch (SQLException e) {
@@ -123,7 +144,7 @@ public class BeastManController {
         Generate g = new Generate();
         if (monster != null) {
             nameLabel.setText(monster.getLocName());
-            sizeLabel.setText(String.valueOf(monster.getSize()) + " " + monster.getType() + ", " + String.valueOf(monster.getAlign()));
+            sizeLabel.setText(monster.getSize() + " " + monster.getType() + ", " + monster.getAlign());
             ACLabel.setText(monster.getAC());
             HPLabel.setText(String.valueOf(monster.getHP()) + " (" + monster.getHPDice() + ")");
             speedLabel.setText(monster.getSpeed());
@@ -139,6 +160,11 @@ public class BeastManController {
             intModModLabel.setText(String.valueOf(g.setMod(monster.getIntl())));
             wisModLabel.setText(String.valueOf(g.setMod(monster.getWis())));
             chaModLabel.setText(String.valueOf(g.setMod(monster.getCha())));
+
+            /*
+
+
+
             STLable.setText(monster.getST());
             skillLabel.setText(monster.getSkills());
             damVulLabel.setText(monster.getDamVul());
@@ -148,6 +174,7 @@ public class BeastManController {
             sensesLabel.setText(monster.getSenses());
             langLabel.setText(monster.getLangs());
             challengeLabel.setText(String.valueOf(monster.getChallenge()));
+            */
 
         } else {
             nameLabel.setText("");
@@ -167,6 +194,10 @@ public class BeastManController {
             intModModLabel.setText("");
             wisModLabel.setText("");
             chaModLabel.setText("");
+            /*
+
+
+
             STLable.setText("");
             skillLabel.setText("");
             damVulLabel.setText("");
@@ -176,6 +207,7 @@ public class BeastManController {
             sensesLabel.setText("");
             langLabel.setText("");
             challengeLabel.setText("");
+            */
         }
 
     }

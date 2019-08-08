@@ -58,12 +58,6 @@ public class NewCharController {
     @FXML private RadioButton surRb;
     @FXML private Label ststLb;
 
-
-
-
-
-
-
     @FXML private Label cntr;
     @FXML private Label nameLabel;
     @FXML private TextArea txtFld;
@@ -80,16 +74,11 @@ public class NewCharController {
     @FXML private ChoiceBox backChoice;
     @FXML private Button addClass;
 
-
-
     @FXML private TextArea persTextArea;
     @FXML private ChoiceBox perstrtChoice;
     @FXML private ChoiceBox idealChoice;
     @FXML private ChoiceBox bondChoice;
     @FXML private ChoiceBox flawChoice;
-
-
-
 
     private Stage dialogStage;
     private Character character;

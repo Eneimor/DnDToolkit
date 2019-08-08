@@ -8,9 +8,9 @@ import javafx.beans.property.StringProperty;
 public class Monster {
     private final IntegerProperty id;
     private final StringProperty locName;
-    private final IntegerProperty mSize;
+    private final StringProperty mSize;
     private final StringProperty mType;
-    private final IntegerProperty align;
+    private final StringProperty align;
     private final StringProperty ac;
     private final IntegerProperty hp;
     private final StringProperty hpDice;
@@ -21,6 +21,9 @@ public class Monster {
     private final IntegerProperty intl;
     private final IntegerProperty wis;
     private final IntegerProperty cha;
+    /*
+
+
     private final StringProperty st;
     private final StringProperty skills;
     private final StringProperty damVul;
@@ -30,23 +33,29 @@ public class Monster {
     private final StringProperty senses;
     private final StringProperty langs;
     private final IntegerProperty challenge;
+    */
 
 
 
-
-    public Monster() {this(0,null,0,null,0, null, 0, null, null,
-            0, 0, 0, 0, 0, 0, null,null, null, null, null,
+    public Monster() {this(0,null,null,null,null, null, 0, null,
+            null, 0, 0, 0, 0, 0, 0);}
+            /*
+            null,null, null, null, null,
             null, null, null, 0);}
-
-    public Monster(int id, String locName, int mSize, String mType, int align, String ac, int hp, String hpDice,
-                   String speed, int str, int dex, int con, int intl, int wis, int cha, String st, String skills,
+*/
+    public Monster(int id, String locName, String mSize, String mType, String align, String ac, int hp, String hpDice,
+                   String speed, int str, int dex, int con, int intl, int wis, int cha
+                   /*
+                   , String st, String skills,
                    String damVul, String damRes, String damImm, String condImm, String senses, String langs,
-                   int challenge) {
+                   int challenge
+                   */
+                   ) {
         this.id = new SimpleIntegerProperty(id);
         this.locName = new SimpleStringProperty(locName);
-        this.mSize = new SimpleIntegerProperty(mSize);
+        this.mSize = new SimpleStringProperty(mSize);
         this.mType = new SimpleStringProperty(mType);
-        this.align = new SimpleIntegerProperty(align);
+        this.align = new SimpleStringProperty(align);
         this.ac = new SimpleStringProperty(ac);
         this.hp = new SimpleIntegerProperty(hp);
         this.hpDice = new SimpleStringProperty(hpDice);
@@ -57,6 +66,8 @@ public class Monster {
         this.intl = new SimpleIntegerProperty(intl);
         this.wis = new SimpleIntegerProperty(wis);
         this.cha = new SimpleIntegerProperty(cha);
+        /*
+
         this.st = new SimpleStringProperty(st);
         this.skills = new SimpleStringProperty(skills);
         this.damVul = new SimpleStringProperty(damVul);
@@ -66,6 +77,7 @@ public class Monster {
         this.senses = new SimpleStringProperty(senses);
         this.langs = new SimpleStringProperty(langs);
         this.challenge = new SimpleIntegerProperty(challenge);
+        */
 
     }
 
@@ -77,17 +89,18 @@ public class Monster {
     public void setLocName(String locName) {this.locName.set(locName);}
     public StringProperty locNameProperty() {return locName;}
 
-    public int getSize() {return mSize.get();}
-    public void setSize(int mSize) {this.mSize.set(mSize);}
-    public IntegerProperty sizeProperty() {return mSize;}
+    public String getSize() {return mSize.get();}
+    public void setSize(String mSize) {this.mSize.set(mSize);}
+    public StringProperty sizeProperty() {return mSize;}
 
     public String getType() { return mType.get();}
     public void setType(String mType) {this.mType.set(mType);}
     public StringProperty typeProperty() {return mType;}
 
-    public int getAlign() {return align.get();}
-    public void setAlign(int align) {this.align.set(align);}
-    public IntegerProperty alignProperty() {return align;}
+    public String getAlign() {return align.get();}
+    public void setAlign(String align) {this.align.set(align);}
+    public StringProperty alignProperty() {return align;}
+
 
     public String getAC() { return ac.get();}
     public void setAC(String ac) {this.ac.set(ac);}
@@ -134,6 +147,9 @@ public class Monster {
     public int getCha() {return cha.get();}
     public void setCha(int cha) {this.cha.set(cha);}
     public IntegerProperty chaProperty() {return cha;}
+    /*
+
+
 
     public String getST() { return st.get();}
     public void setST(String st) {this.st.set(st);}
@@ -170,7 +186,7 @@ public class Monster {
     public int getChallenge() {return challenge.get();}
     public void setChallenge(int challenge) {this.challenge.set(challenge);}
     public IntegerProperty challengeProperty() {return challenge;}
-
+    */
 
 
 
