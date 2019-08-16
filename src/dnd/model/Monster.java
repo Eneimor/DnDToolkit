@@ -27,8 +27,8 @@ public class Monster {
     private final IntegerProperty svInt;
     private final IntegerProperty svWis;
     private final IntegerProperty svCha;
-    /*
-
+    private final IntegerProperty challenge;
+    private final IntegerProperty pasPerception;
 
     private final StringProperty skills;
     private final StringProperty damVul;
@@ -37,24 +37,23 @@ public class Monster {
     private final StringProperty condImm;
     private final StringProperty senses;
     private final StringProperty langs;
-    private final IntegerProperty challenge;
-    */
+
 
 
 
     public Monster() {this(0,null,null,null,null, null, 0, null,
-            null, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0);}
-            /*
-            null,null, null, null, null,
-            null, null, null, 0);}
-*/
+            null, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,
+            0,0,0, null, null, null, null, null, null, null);}
+
     public Monster(int id, String locName, String mSize, String mType, String align, String ac, int hp, String hpDice,
                    String speed, int str, int dex, int con, int intl, int wis, int cha, int svStr, int svDex, int svCon,
-                   int svInt, int svWis, int svCha
+                   int svInt, int svWis, int svCha,int challenge, int pasPerceprion, String skills, String damVul,
+                   String damRes, String damImm, String condImm, String senses, String langs
+
                    /*
-                   , String st, String skills,
-                   String damVul, String damRes, String damImm, String condImm, String senses, String langs,
-                   int challenge
+                   , String st, ,
+                   , , , , ,
+
                    */
                    ) {
         this.id = new SimpleIntegerProperty(id);
@@ -78,9 +77,8 @@ public class Monster {
         this.svInt = new SimpleIntegerProperty(intl);
         this.svWis = new SimpleIntegerProperty(wis);
         this.svCha = new SimpleIntegerProperty(cha);
-        /*
-
-
+        this.challenge = new SimpleIntegerProperty(challenge);
+        this.pasPerception = new SimpleIntegerProperty(pasPerceprion);
         this.skills = new SimpleStringProperty(skills);
         this.damVul = new SimpleStringProperty(damVul);
         this.damRes = new SimpleStringProperty(damRes);
@@ -88,7 +86,14 @@ public class Monster {
         this.condImm = new SimpleStringProperty(condImm);
         this.senses = new SimpleStringProperty(senses);
         this.langs = new SimpleStringProperty(langs);
-        this.challenge = new SimpleIntegerProperty(challenge);
+
+
+        /*
+
+
+
+
+
         */
 
     }
@@ -180,14 +185,13 @@ public class Monster {
     public void setSvCha(int svCha) {this.svCha.set(svCha);}
     public IntegerProperty svChaProperty() {return svCha;}
 
+    public int getChallenge() {return challenge.get();}
+    public void setChallenge(int challenge) {this.challenge.set(challenge);}
+    public IntegerProperty challengeProperty() {return challenge;}
 
-
-
-
-
-    /*
-
-
+    public int getPassivePerceprion() {return pasPerception.get();}
+    public void setPassivePerceprion(int pasPerception) {this.pasPerception.set(pasPerception);}
+    public IntegerProperty passivePerceprionProperty() {return pasPerception;}
 
     public String getSkills() { return skills.get();}
     public void setSkills(String skills) {this.skills.set(skills);}
@@ -217,9 +221,26 @@ public class Monster {
     public void setLangs(String langs) {this.langs.set(langs);}
     public StringProperty langsProperty() {return langs;}
 
-    public int getChallenge() {return challenge.get();}
-    public void setChallenge(int challenge) {this.challenge.set(challenge);}
-    public IntegerProperty challengeProperty() {return challenge;}
+
+
+
+    /*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     */
 
 
