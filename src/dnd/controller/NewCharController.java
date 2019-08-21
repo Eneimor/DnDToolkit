@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.sql.PreparedStatement;
@@ -32,6 +33,14 @@ public class NewCharController {
     @FXML private Label intModLabel;
     @FXML private Label wisModLabel;
     @FXML private Label chaModLabel;
+
+    @FXML private Label strLabel1;
+    @FXML private Label dexLabel1;
+    @FXML private Label conLabel1;
+    @FXML private Label intLabel1;
+    @FXML private Label wisLabel1;
+    @FXML private Label chaLabel1;
+
     @FXML private Label strSv;
     @FXML private Label dexSv;
     @FXML private Label conSv;
@@ -66,6 +75,7 @@ public class NewCharController {
     @FXML private ChoiceBox raceChoice;
     @FXML private ChoiceBox classChoice;
     @FXML private ChoiceBox classChoice1;
+    @FXML private ChoiceBox abilityChoice;
 
     @FXML private ChoiceBox subraceChoice;
     @FXML private ChoiceBox lvlChoice;
@@ -80,6 +90,16 @@ public class NewCharController {
     @FXML private ChoiceBox bondChoice;
     @FXML private ChoiceBox flawChoice;
 
+    @FXML private Pane countPane;
+    @FXML private Pane stPane;
+
+    @FXML private TextField strTF;
+    @FXML private TextField dexTF;
+    @FXML private TextField conTF;
+    @FXML private TextField intTF;
+    @FXML private TextField wisTF;
+    @FXML private TextField chaTF;
+
     private Stage dialogStage;
     private Character character;
     private boolean okClicked = false;
@@ -90,6 +110,7 @@ public class NewCharController {
     ObservableList<Integer> level = FXCollections.observableArrayList();
     ObservableList<String> align = FXCollections.observableArrayList();
     ObservableList<String> backgrounds = FXCollections.observableArrayList();
+    ObservableList<String> abilCh = FXCollections.observableArrayList();
     public final String sqlPersTraits = "SELECT description FROM cl_perstraits WHERE backid=";
     public final String sqlIdeals = "SELECT description FROM cl_ideals WHERE backid=";
     public final String sqlBonds = "SELECT description FROM cl_bonds WHERE backid=";
@@ -107,13 +128,24 @@ public class NewCharController {
      */
     @FXML
     private void initialize() {
+        countPane.setVisible(false);
+        stPane.setVisible(false);
+
+
+
         //Выставляем начальные значения
-        strLabel.setText("9");
-        dexLabel.setText("9");
-        conLabel.setText("9");
-        intLabel.setText("9");
-        wisLabel.setText("9");
-        chaLabel.setText("9");
+        strLabel.setText("8");
+        dexLabel.setText("8");
+        conLabel.setText("8");
+        intLabel.setText("8");
+        wisLabel.setText("8");
+        chaLabel.setText("8");
+        strLabel1.setText("8");
+        dexLabel1.setText("8");
+        conLabel1.setText("8");
+        intLabel1.setText("8");
+        wisLabel1.setText("8");
+        chaLabel1.setText("8");
         strModLabel.setText("-1");
         dexModLabel.setText("-1");
         conModLabel.setText("-1");
@@ -133,13 +165,13 @@ public class NewCharController {
             ResultSet rs4 = ps3.executeQuery();
 
             while (rs1.next()) {
-                races.add(rs1.getString("name"));
+                races.add(rs1.getString("racename"));
             }
             while (rs2.next()) {
                 classes.add(rs2.getString("name"));
             }
             while (rs3.next()) {
-                align.add(rs3.getString("name"));
+                align.add(rs3.getString("alignName"));
             }
             while (rs4.next()) {
                 backgrounds.add(rs4.getString("name"));
@@ -148,14 +180,43 @@ public class NewCharController {
             classChoice.setItems(classes);
             alignChoice.setItems(align);
             backChoice.setItems(backgrounds);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        abilCh.add("Manual Choice");
+        abilCh.add("Point Buy");
+        abilityChoice.setItems(abilCh);
 
         for (int i = 1; i <= 20; i++) {
             level.add(i);
         }
         lvlChoice.setItems(level);
+
+        //Слушатель для чойсбокса с абилками
+        abilityChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                String getAbilVal = (String) abilityChoice.getValue();
+
+                switch (getAbilVal) {
+                    case "Manual Choice":
+                        countPane.setVisible(false);
+                        countPane.setDisable(true);
+                        stPane.setDisable(false);
+                        stPane.setVisible(true);
+                        break;
+                    case "Point Buy":
+                        countPane.setVisible(true);
+                        countPane.setDisable(false);
+                        stPane.setDisable(true);
+                        stPane.setVisible(false);
+                        break;
+                }
+            }
+        });
+
+
 
         //Слушатель для рас
         raceChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -465,7 +526,7 @@ public class NewCharController {
             }
         });
 
-        //Слушатель для бэкгроундов
+        //Слушатель для бэкграундов
         backChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -526,6 +587,7 @@ public class NewCharController {
         cntr.setText(Integer.toString(counter));
         cntr.setVisible(true);
     }
+
     //TODO: доделать этот метод
     public void countCost(int oldValue){
         switch (oldValue) {

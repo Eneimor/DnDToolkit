@@ -17,8 +17,7 @@ import java.sql.SQLException;
 
 public class BeastManController {
 
-    @FXML
-    private ListView blistView;
+    @FXML private ListView blistView;
     @FXML private Label nameLabel;
     @FXML private Label sizeLabel;
     @FXML private Label ACLabel;
@@ -97,8 +96,6 @@ public class BeastManController {
     private final String sqlMonsterLanguage = "select langName as language from monstr_languages a\n"+
             "inner join cl_languages b on a.languageid = b.id\n"+
             "where monsterid = ";
-
-
 
     private static ObservableList<Monster> monsterData = FXCollections.observableArrayList();
 
@@ -238,6 +235,7 @@ public class BeastManController {
 
         blistView.setItems(monsterData);
 
+
         //Отображаем данные в ListView
         blistView.setCellFactory(param -> new ListCell<Monster>() {
             @Override
@@ -257,7 +255,6 @@ public class BeastManController {
                 showMonsterData(newValue);
             }
         });
-
     }
 
 
@@ -297,24 +294,6 @@ public class BeastManController {
             condImmLabel.setText(monster.getCondImm());
             sensesLabel.setText(monster.getSenses());
             langLabel.setText(monster.getLangs());
-
-
-
-
-            /*
-
-
-
-
-
-
-
-
-
-
-
-            */
-
         } else {
             nameLabel.setText("");
             sizeLabel.setText("");
@@ -349,7 +328,6 @@ public class BeastManController {
             sensesLabel.setText("");
             langLabel.setText("");
         }
-
     }
 
     @FXML
