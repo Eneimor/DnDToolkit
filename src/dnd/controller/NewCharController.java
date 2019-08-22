@@ -1,3 +1,4 @@
+import dnd.Utils.Buttons;
 import dnd.Utils.Connect;
 import dnd.Utils.DR;
 import dnd.Utils.Generate;
@@ -74,17 +75,13 @@ public class NewCharController {
     @FXML private TextArea backTextArea;
     @FXML private ChoiceBox raceChoice;
     @FXML private ChoiceBox classChoice;
-    @FXML private ChoiceBox classChoice1;
     @FXML private ChoiceBox abilityChoice;
 
     @FXML private ChoiceBox subraceChoice;
     @FXML private ChoiceBox lvlChoice;
-    @FXML private ChoiceBox lvlChoice1;
     @FXML private ChoiceBox alignChoice;
     @FXML private ChoiceBox backChoice;
-    @FXML private Button addClass;
 
-    @FXML private TextArea persTextArea;
     @FXML private ChoiceBox perstrtChoice;
     @FXML private ChoiceBox idealChoice;
     @FXML private ChoiceBox bondChoice;
@@ -100,8 +97,21 @@ public class NewCharController {
     @FXML private TextField wisTF;
     @FXML private TextField chaTF;
 
+    @FXML private Button strButPlus;
+    @FXML private Button strButMinus;
+    @FXML private Button dexButPlus;
+    @FXML private Button dexButMinus;
+    @FXML private Button conButPlus;
+    @FXML private Button conButMinus;
+    @FXML private Button intButPlus;
+    @FXML private Button intButMinus;
+    @FXML private Button wisButPlus;
+    @FXML private Button wisButMinus;
+    @FXML private Button chaButPlus;
+    @FXML private Button chaButMinus;
     private Stage dialogStage;
     private Character character;
+
     private boolean okClicked = false;
 
     ObservableList<String> races = FXCollections.observableArrayList();
@@ -117,7 +127,7 @@ public class NewCharController {
     public final String sqlFlaws = "SELECT description FROM cl_flaws WHERE backid=";
 
     public final String sqlRaces = "SELECT racename FROM cl_race";
-    public final String sqlSubraces = "SELECT subracename FROM cl_subrace WHERE main_race = ";
+    public final String sqlSubraces = "SELECT subracename FROM cl_subrace WHERE raceid = (SELECT id FROM cl_race WHERE racename = ";
     public final String sqlClasses = "SELECT name FROM cl_class";
     public final String sqlAlign = "SELECT alignName FROM cl_alignment WHERE id < 10";
     public final String sqlBack = "SELECT name FROM cl_background";
@@ -226,8 +236,8 @@ public class NewCharController {
 
                 //Получение списка подрас
                 if (newValue.equals(getRaceVal)) {
-                    PreparedStatement ps = connect.getPreparedStatement(sqlSubraces + "\"" + getRaceVal + "\"");
-                    PreparedStatement ps2 = connect.getPreparedStatement("SELECT description FROM cl_race WHERE name ="
+                    PreparedStatement ps = connect.getPreparedStatement(sqlSubraces + "\"" + getRaceVal + "\")");
+                    PreparedStatement ps2 = connect.getPreparedStatement("SELECT description FROM cl_race WHERE racename ="
                             + "\"" + getRaceVal + "\"");
                     try {
                         ResultSet rs = ps.executeQuery();
@@ -255,7 +265,7 @@ public class NewCharController {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 String getSubRaceVal = (String) subraceChoice.getValue();
                 if (newValue.equals(getSubRaceVal)) {
-                    PreparedStatement ps3 = connect.getPreparedStatement("SELECT description FROM cl_subrace WHERE name ="
+                    PreparedStatement ps3 = connect.getPreparedStatement("SELECT description FROM cl_subrace WHERE subracename ="
                             + "\"" + getSubRaceVal + "\"");
                     try {
                         ResultSet rs3 = ps3.executeQuery();
@@ -263,11 +273,11 @@ public class NewCharController {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-
                 }
-
             }
         });
+
+        //TODO: поля для оригинальных названий в каждый словарь
 
         //Слушатель для классов
         classChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -526,6 +536,8 @@ public class NewCharController {
             }
         });
 
+
+
         //Слушатель для бэкграундов
         backChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
@@ -662,7 +674,7 @@ public class NewCharController {
         try {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                subraces.add(rs.getString("name"));
+                subraces.add(rs.getString("subracename"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -746,25 +758,87 @@ public class NewCharController {
         subraceChoice.setValue(g.getSubraceName());
         classChoice.setValue(g.getClassName());
 
-
-
         System.out.println(g.getRaceCnt());
         System.out.println(g.getRaceName());
         System.out.println(g.getSubraceCnt());
         System.out.println(g.getSubraceName());
         System.out.println(g.getClCntt());
         System.out.println(g.getClassName());
-
-
     }
 
     @FXML
-    void StatRoll() {
-        Generate g = new Generate();
-        g.getStr();
-        g.getDex();
-
+    void setStrButPlus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityPlus(strLabel1,ststLb);
     }
+
+    @FXML
+    void setDexButPlus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityPlus(dexLabel1,ststLb);
+    }
+
+    @FXML
+    void setConButPlus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityPlus(conLabel1,ststLb);
+    }
+
+    @FXML
+    void setIntButPlus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityPlus(intLabel1,ststLb);
+    }
+
+    @FXML
+    void setWisButPlus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityPlus(wisLabel1,ststLb);
+    }
+
+    @FXML
+    void setChaButPlus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityPlus(chaLabel1,ststLb);
+    }
+
+    @FXML
+    void setStrButMinus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityMinus(strLabel1,ststLb);
+    }
+
+    @FXML
+    void setDexButMinus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityMinus(dexLabel1,ststLb);
+    }
+
+    @FXML
+    void setConButMinus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityMinus(conLabel1,ststLb);
+    }
+
+    @FXML
+    void setIntButMinus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityMinus(intLabel1,ststLb);
+    }
+
+    @FXML
+    void setWisButMinus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityMinus(wisLabel1,ststLb);
+    }
+
+    @FXML
+    void setChaButMinus(ActionEvent event) {
+        Buttons b = new Buttons();
+        b.abilityMinus(chaLabel1,ststLb);
+    }
+
+
 
     @FXML
     void previousPane(ActionEvent event) {
