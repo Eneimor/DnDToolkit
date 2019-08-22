@@ -247,6 +247,7 @@ public class NewCharController {
                         e.printStackTrace();
                     }
 
+                    //TODO: разобраться с NullPointerException при загрузке выпадающего списка подрас
                     if (subraceChoice.getItems().isEmpty()) {
                         getSubraces(ps);
                         subraceChoice.setItems(subraces);
