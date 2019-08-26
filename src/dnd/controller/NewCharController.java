@@ -275,10 +275,9 @@ public class NewCharController {
                         e.printStackTrace();
                     }
                 }
+
             }
         });
-
-        //TODO: поля для оригинальных названий в каждый словарь
 
         //Слушатель для классов
         classChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
