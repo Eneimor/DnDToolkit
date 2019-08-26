@@ -41,7 +41,7 @@ public class Main extends Application {
         MainController mainController = loader.getController();
 
         Navigator.setMainController(mainController);
-        Navigator.loadScreen(Navigator.MMENU);
+        Navigator.loadScreen(Navigator.NCH);//MMENU);
 
         return mainPane;
     }

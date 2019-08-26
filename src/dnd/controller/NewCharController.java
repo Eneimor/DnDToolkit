@@ -601,28 +601,7 @@ public class NewCharController {
         cntr.setVisible(true);
     }
 
-    //TODO: доделать этот метод
-    public void countCost(int oldValue){
-        switch (oldValue) {
-            case 8: setCost(0);
-                break;
-            case 9: setCost(1);
-                break;
-            case 10: setCost(2);
-                break;
-            case 11: setCost(3);
-                break;
-            case 12: setCost(4);
-                break;
-            case 13: setCost(5);
-                break;
-            case 14: setCost(7);
-                break;
-            case 15: setCost(9);
-                break;
-        }
 
-    }
 
     //TODO: методы для определения уровня и бонуса мастерства
     //TODO: начисление хп
@@ -759,11 +738,9 @@ public class NewCharController {
         subraceChoice.setValue(g.getSubraceName());
         classChoice.setValue(g.getClassName());
 
-        System.out.println(g.getRaceCnt());
+
         System.out.println(g.getRaceName());
-        System.out.println(g.getSubraceCnt());
         System.out.println(g.getSubraceName());
-        System.out.println(g.getClCntt());
         System.out.println(g.getClassName());
     }
 
