@@ -42,12 +42,6 @@ public class NewCharController {
     @FXML private Label wisLabel1;
     @FXML private Label chaLabel1;
 
-    @FXML private Label strSv;
-    @FXML private Label dexSv;
-    @FXML private Label conSv;
-    @FXML private Label intSv;
-    @FXML private Label wisSv;
-    @FXML private Label chaSv;
     @FXML private RadioButton acrRb;
     @FXML private RadioButton anRb;
     @FXML private RadioButton arRb;
@@ -97,22 +91,19 @@ public class NewCharController {
     @FXML private TextField wisTF;
     @FXML private TextField chaTF;
 
-    @FXML private Button strButPlus;
-    @FXML private Button strButMinus;
-    @FXML private Button dexButPlus;
-    @FXML private Button dexButMinus;
-    @FXML private Button conButPlus;
-    @FXML private Button conButMinus;
-    @FXML private Button intButPlus;
-    @FXML private Button intButMinus;
-    @FXML private Button wisButPlus;
-    @FXML private Button wisButMinus;
-    @FXML private Button chaButPlus;
-    @FXML private Button chaButMinus;
+    @FXML private Label profBonusLabel;
+    @FXML private Label speedLabel;
+    @FXML private Label maxhpLabel;
+    @FXML private Label STLabel;
+    @FXML private Label hitDiceLabel;
+
+
     private Stage dialogStage;
     private Character character;
 
     private boolean okClicked = false;
+
+
 
     ObservableList<String> races = FXCollections.observableArrayList();
     ObservableList<String> subraces = FXCollections.observableArrayList();
@@ -236,26 +227,31 @@ public class NewCharController {
 
                 //Получение списка подрас
                 if (newValue.equals(getRaceVal)) {
+
+                    //TODO: разобраться с NullPointerException при загрузке выпадающего списка подрас
                     PreparedStatement ps = connect.getPreparedStatement(sqlSubraces + "\"" + getRaceVal + "\")");
+
+                        if (subraceChoice.getItems().isEmpty()) {
+                            getSubraces(ps);
+                            subraceChoice.setItems(subraces);
+                        } else {
+                            subraces.clear();
+                            getSubraces(ps);
+                            subraceChoice.setItems(subraces);
+                        }
+
                     PreparedStatement ps2 = connect.getPreparedStatement("SELECT description FROM cl_race WHERE racename ="
                             + "\"" + getRaceVal + "\"");
                     try {
-                        ResultSet rs = ps.executeQuery();
                         ResultSet rs2 = ps2.executeQuery();
                         txtFld.setText(rs2.getString("description"));
                     } catch (SQLException e) {
                         e.printStackTrace();
+                    } finally {
+                        connect.closePrepareStatement(ps2);
                     }
 
-                    //TODO: разобраться с NullPointerException при загрузке выпадающего списка подрас
-                    if (subraceChoice.getItems().isEmpty()) {
-                        getSubraces(ps);
-                        subraceChoice.setItems(subraces);
-                    } else {
-                        subraces.clear();
-                        getSubraces(ps);
-                        subraceChoice.setItems(subraces);
-                    }
+
                 }
             }
         });
@@ -265,17 +261,24 @@ public class NewCharController {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 String getSubRaceVal = (String) subraceChoice.getValue();
+                /*
                 if (newValue.equals(getSubRaceVal)) {
                     PreparedStatement ps3 = connect.getPreparedStatement("SELECT description FROM cl_subrace WHERE subracename ="
                             + "\"" + getSubRaceVal + "\"");
+
                     try {
                         ResultSet rs3 = ps3.executeQuery();
-                        txtFld.setText(rs3.getString("description"));
+                        if (rs3.isBeforeFirst()) {
+                            txtFld.setText(rs3.getString("description"));
+                        } else {
+                            txtFld.setText("");
+                        }
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                }
 
+                }
+*/
             }
         });
 
@@ -286,6 +289,7 @@ public class NewCharController {
                 String getClassVal = (String) classChoice.getValue();
                 PreparedStatement ps3 = connect.getPreparedStatement("SELECT description FROM cl_class WHERE name = "
                         + "\"" + getClassVal + "\"");
+                /*
                 try {
                     ResultSet rs3 = ps3.executeQuery();
                     clTxt.setText(rs3.getString("description"));
@@ -533,7 +537,10 @@ public class NewCharController {
                         setCntr(2);
                         break;
                 }
+                */
             }
+
+
         });
 
 
@@ -650,6 +657,7 @@ public class NewCharController {
 
 
     private void getSubraces(PreparedStatement ps) {
+        Connect c = new Connect();
         try {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -657,6 +665,8 @@ public class NewCharController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            c.closePrepareStatement(ps);
         }
     }
 
@@ -735,12 +745,20 @@ public class NewCharController {
 
         raceChoice.setValue(g.getRaceName());
         subraceChoice.setValue(g.getSubraceName());
-        classChoice.setValue(g.getClassName());
+        classChoice.setValue(g.getClassname());
+        lvlChoice.setValue(g.getLevel());
+        profBonusLabel.setText(String.valueOf(g.getProficiencyBonus()));
+        speedLabel.setText(String.valueOf(g.getSpeed()));
+        maxhpLabel.setText(String.valueOf(g.getMaxhp()));
+        STLabel.setText(g.getSavingThrows());
+
+        hitDiceLabel.setText(g.getHitDiceName());
 
 
         System.out.println(g.getRaceName());
         System.out.println(g.getSubraceName());
-        System.out.println(g.getClassName());
+        System.out.println(g.getClassname());
+        System.out.println(g.getHitDiceName());
     }
 
     @FXML

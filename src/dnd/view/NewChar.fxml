@@ -268,13 +268,13 @@
                                             </rowConstraints>
                                             <children>
                                                 <Label text="Proficiency bonus" />
-                                                <Label text="Label" GridPane.columnIndex="1" />
+                                                <Label fx:id="profBonusLabel" text="Label" GridPane.columnIndex="1" />
                                                 <Label text="Passive Perception" GridPane.rowIndex="1" />
                                                 <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Label text="Armor class" GridPane.rowIndex="2" />
                                                 <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                 <Label text="Max HP" GridPane.rowIndex="3" />
-                                                <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <Label fx:id="maxhpLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                             </children>
                                         </GridPane>
                                         <GridPane layoutX="12.0" layoutY="27.0" prefHeight="61.0" prefWidth="828.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="25.0">
@@ -313,34 +313,6 @@
                                                 <Label fx:id="chaModLabel" text="strLabel" GridPane.columnIndex="5" GridPane.rowIndex="2" />
                                             </children>
                                         </GridPane>
-                                        <GridPane layoutX="250.0" layoutY="166.0" prefHeight="43.0" prefWidth="362.0">
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="57.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="52.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="56.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="61.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0" prefWidth="67.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0" prefWidth="70.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints maxHeight="51.0" minHeight="0.0" prefHeight="19.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="89.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                            <children>
-                                                <Label text="STR" />
-                                                <Label text="DEX" GridPane.columnIndex="1" />
-                                                <Label text="CON" GridPane.columnIndex="2" />
-                                                <Label text="INT" GridPane.columnIndex="3" />
-                                                <Label text="WIS" GridPane.columnIndex="4" />
-                                                <Label text="CHA" GridPane.columnIndex="5" />
-                                                <Label fx:id="strSv" text="strLabel" GridPane.rowIndex="1" />
-                                                <Label fx:id="dexSv" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <Label fx:id="conSv" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <Label fx:id="intSv" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                                <Label fx:id="wisSv" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                                                <Label fx:id="chaSv" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                                            </children>
-                                        </GridPane>
                                         <Label layoutX="250.0" layoutY="137.0" text="Saving Throws" />
                                         <GridPane layoutX="451.0" layoutY="229.0" prefHeight="90.0" prefWidth="166.0">
                                             <columnConstraints>
@@ -353,7 +325,7 @@
                                             </rowConstraints>
                                             <children>
                                                 <Label text="Speed" />
-                                                <Label text="Label" GridPane.columnIndex="1" />
+                                                <Label fx:id="speedLabel" text="Label" GridPane.columnIndex="1" />
                                                 <Label text="Darkvision" GridPane.rowIndex="1" />
                                                 <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                             </children>
@@ -420,6 +392,9 @@
                                         <ImageView fx:id="imgVw2" fitHeight="210.0" fitWidth="200.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
                                         <Label layoutX="637.0" layoutY="407.0" text="Доступно навыков:" />
                                         <Label fx:id="cntr" layoutX="752.0" layoutY="409.0" text="Label" visible="false" />
+                              <Label fx:id="STLabel" layoutX="350.0" layoutY="138.0" text="Label" />
+                              <Label layoutX="250.0" layoutY="173.0" text="Hit Dices" />
+                              <Label fx:id="hitDiceLabel" layoutX="350.0" layoutY="173.0" text="Label" />
 
                                     </children>
                                 </AnchorPane>
