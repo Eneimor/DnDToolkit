@@ -11,9 +11,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
+import javafx.scene.image.Image;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -97,6 +98,9 @@ public class NewCharController {
     @FXML private Label STLabel;
     @FXML private Label hitDiceLabel;
 
+    @FXML private ImageView imgVw1;
+    @FXML private ImageView imgVw2;
+
 
     private Stage dialogStage;
     private Character character;
@@ -132,7 +136,9 @@ public class NewCharController {
         countPane.setVisible(false);
         stPane.setVisible(false);
 
-
+        Image image = new Image("/dnd/resource/img/avatars/ef01.jpg");
+        imgVw1.setImage(image);
+        imgVw2.setImage(image);
 
         //Выставляем начальные значения
         strLabel.setText("8");
@@ -831,6 +837,16 @@ public class NewCharController {
     void setChaButMinus(ActionEvent event) {
         Buttons b = new Buttons();
         b.abilityMinus(chaLabel1,ststLb);
+    }
+
+    //TODO: сделать переключение картинок
+    @FXML
+    void nextPicture(ActionEvent event) {
+    }
+
+    @FXML
+    void previousPicture(ActionEvent event) {
+
     }
 
 

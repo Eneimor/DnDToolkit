@@ -6,7 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import dnd.Utils.SpriteAnimation;
@@ -366,8 +366,8 @@ public class DiceRollerController {
     }
 
 
-
-    /*private void handleRoll(ActionEvent actionEvent) throws Exception {
+/*
+    private void handleRoll(ActionEvent actionEvent) throws Exception {
         Image image = new Image("/dnd/resource/img/sprite.png");
         imgvw.setImage(image);
         imgvw.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT));

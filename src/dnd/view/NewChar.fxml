@@ -170,8 +170,8 @@
                                             </font>
                                         </Label>
                                         <ImageView fx:id="imgVw1" fitHeight="210.0" fitWidth="200.0" layoutX="112.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" />
-                                        <Button layoutX="72.0" layoutY="67.0" mnemonicParsing="false" prefHeight="130.0" prefWidth="26.0" text="&lt;" />
-                                        <Button layoutX="319.0" layoutY="66.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="26.0" text="&gt;" />
+                                        <Button layoutX="72.0" layoutY="67.0" mnemonicParsing="false" onAction="#previousPicture" prefHeight="130.0" prefWidth="26.0" text="&lt;" />
+                                        <Button layoutX="319.0" layoutY="66.0" mnemonicParsing="false" onAction="#nextPicture" prefHeight="131.0" prefWidth="26.0" text="&gt;" />
                                         <Button layoutX="274.0" layoutY="243.0" mnemonicParsing="false" text="Change" />
                                         <TextArea fx:id="txtFld" editable="false" layoutX="14.0" layoutY="431.0" prefHeight="200.0" prefWidth="418.0" />
                                         <Label layoutX="14.0" layoutY="336.0" prefHeight="25.0" prefWidth="72.0" text="Alignment">
