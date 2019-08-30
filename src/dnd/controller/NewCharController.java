@@ -16,14 +16,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class NewCharController {
     DR dr = new DR();
@@ -126,10 +122,10 @@ public class NewCharController {
     ObservableList<String> align = FXCollections.observableArrayList();
     ObservableList<String> backgrounds = FXCollections.observableArrayList();
     ObservableList<String> abilCh = FXCollections.observableArrayList();
-    public final String sqlPersTraits = "SELECT description FROM cl_perstraits WHERE backid=";
-    public final String sqlIdeals = "SELECT description FROM cl_ideals WHERE backid=";
-    public final String sqlBonds = "SELECT description FROM cl_bonds WHERE backid=";
-    public final String sqlFlaws = "SELECT description FROM cl_flaws WHERE backid=";
+    public final String sqlPersTraits = "SELECT description FROM cl_perstraits WHERE backid= ";
+    public final String sqlIdeals = "SELECT description FROM cl_ideals WHERE backid = ";
+    public final String sqlBonds = "SELECT description FROM cl_bonds WHERE backid = ";
+    public final String sqlFlaws = "SELECT description FROM cl_flaws WHERE backid = ";
 
     public final String sqlRaces = "SELECT racename FROM cl_race";
     public final String sqlSubraces = "SELECT subracename FROM cl_subrace WHERE raceid = (SELECT id FROM cl_race WHERE racename = ";
@@ -214,25 +210,22 @@ public class NewCharController {
         lvlChoice.setItems(level);
 
         //Слушатель для чойсбокса с абилками
-        abilityChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                String getAbilVal = (String) abilityChoice.getValue();
+        abilityChoice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String getAbilVal = (String) abilityChoice.getValue();
 
-                switch (getAbilVal) {
-                    case "Manual Choice":
-                        countPane.setVisible(false);
-                        countPane.setDisable(true);
-                        stPane.setDisable(false);
-                        stPane.setVisible(true);
-                        break;
-                    case "Point Buy":
-                        countPane.setVisible(true);
-                        countPane.setDisable(false);
-                        stPane.setDisable(true);
-                        stPane.setVisible(false);
-                        break;
-                }
+            switch (getAbilVal) {
+                case "Manual Choice":
+                    countPane.setVisible(false);
+                    countPane.setDisable(true);
+                    stPane.setDisable(false);
+                    stPane.setVisible(true);
+                    break;
+                case "Point Buy":
+                    countPane.setVisible(true);
+                    countPane.setDisable(false);
+                    stPane.setDisable(true);
+                    stPane.setVisible(false);
+                    break;
             }
         });
 
@@ -745,7 +738,7 @@ public class NewCharController {
     }
 
     @FXML
-    void Gen() throws Exception {
+    void Gen() {
         Generate g = new Generate();
 
         strLabel.setText(String.valueOf(g.getStr()));
@@ -766,6 +759,7 @@ public class NewCharController {
         subraceChoice.setValue(g.getSubraceName());
         classChoice.setValue(g.getClassname());
         lvlChoice.setValue(g.getLevel());
+        alignChoice.setValue(g.getAlignment());
         profBonusLabel.setText(String.valueOf(g.getProficiencyBonus()));
         speedLabel.setText(String.valueOf(g.getSpeed()));
         maxhpLabel.setText(String.valueOf(g.getMaxhp()));
@@ -775,6 +769,7 @@ public class NewCharController {
 
         armorLabel.setText(g.getArmorType());
         weaponLabel.setText(g.getWeaponType());
+
 
 
         System.out.println(g.getRaceName());

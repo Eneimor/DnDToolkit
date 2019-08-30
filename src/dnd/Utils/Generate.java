@@ -11,12 +11,13 @@ public class Generate {
     private int[] sourceabilities = new int[6];     //массив для исходных абилок (первоначально рассчитанных)
     private int[] abilities = new int[6];           //массив для абилок
     private int[] mods = new int[6];                //массив для модификаторов
-    int[] bonchars = new int[6];                    //массив где хранятся итоговые бонусы от расы
-    int[] subraceBonuses = new int[6];              //массив для бонусов подрас
+    private int[] bonchars = new int[6];                    //массив где хранятся итоговые бонусы от расы
+    private int[] subraceBonuses = new int[6];              //массив для бонусов подрас
 
     private String raceName;
     private String subraceName;
-    private String className;
+    private String alignment;
+
 
     //переменные для расы
     private int raceid,minage,maxage,minheight,maxheight,minweight,maxweight,racesize,speed;
@@ -401,6 +402,14 @@ public class Generate {
         return subraceName;
     }
 
+    public void setAlignment(String alignment) {
+        this.alignment = alignment;
+    }
+
+    public String getAlignment() {
+        return alignment;
+    }
+
 
     /**
      *
@@ -461,7 +470,7 @@ public class Generate {
      * Присваиваем профишенси бонус переменной ++
     * 3. Выбираем класс ++
      * Устанавливаем броню класса ++
-     * Устанавливаем оружие класса
+     * Устанавливаем оружие класса ++
      * Навыки (на выбор) TODO: подумать над этим
      * Выбираем снаряжение
      *
@@ -472,22 +481,24 @@ public class Generate {
             "maxage, minheight, maxheight, minweight, maxweight, racesize, speed \n" +
             "FROM cl_race ORDER BY RANDOM() LIMIT 1";
 
-    final String sqlSubraces = "SELECT id,subracename,strbon,dexbon,conbon,intlbon,wisbon,chabon,speed FROM cl_subrace WHERE raceid = ";
-    final String sql_ord = " ORDER BY RANDOM() LIMIT 1";
+    final String sqlSubraces = "SELECT id,subracename,strbon,dexbon,conbon,intlbon,wisbon,chabon,speed FROM cl_subrace WHERE raceid = ? ORDER BY RANDOM() LIMIT 1";
 
-    final String sqlClasses = "SELECT id, name, hitDice, savingThrows FROM cl_class";
+    final String sqlClasses = "SELECT id, name, hitDice, savingThrows FROM cl_class ORDER BY RANDOM() LIMIT 1";
+
+    //TODO: доделать выбор мировоззрения
+    final String sqlAlign = "SELECT alignName FROM cl_alignment WHERE id < 10 ORDER BY RANDOM() LIMIT 1";
 
 
     //TODO: посмотреть как чтобы вопросики в запросах ставить. везде.
     final String sqlArmor = "SELECT b.locname as name from class_armor a\n" +
             "LEFT JOIN cl_armortypes b on a.typeid = b.id\n" +
             "LEFT JOIN cl_class c on a.classid = c.id\n" +
-            "where a.classid = ";
+            "where a.classid = ?";
 
     final String sqlWeapon = "SELECT b.locname as name from class_weapon a\n" +
             "LEFT JOIN cl_weapontypes b on a.typeid = b.id\n" +
             "LEFT JOIN cl_class c on a.classid = c.id\n" +
-            "where a.classid = ";
+            "where a.classid = ?";
 
 
 
@@ -532,8 +543,9 @@ public class Generate {
         }
 
         //2. Выбираем случайную подрасу с учетом выбранной расы
-        PreparedStatement psSubraces = c.getPreparedStatement(sqlSubraces + getRaceid() + sql_ord);
+        PreparedStatement psSubraces = c.getPreparedStatement(sqlSubraces);
         try {
+            psSubraces.setInt(1, getRaceid());
             ResultSet rs2 = psSubraces.executeQuery();
             if (!rs2.isBeforeFirst()) {
                 setSubraceid(0);
@@ -563,7 +575,7 @@ public class Generate {
         }
 
         // 3.Выбираем случайный класс
-        PreparedStatement psClass = c.getPreparedStatement(sqlClasses + sql_ord);
+        PreparedStatement psClass = c.getPreparedStatement(sqlClasses);
         try {
             ResultSet rsClass = psClass.executeQuery();
             setClassid(rsClass.getInt("id"));
@@ -577,8 +589,9 @@ public class Generate {
         }
 
         //Выбираем владение броней
-        PreparedStatement psArmor = c.getPreparedStatement(sqlArmor + getClassid());
+        PreparedStatement psArmor = c.getPreparedStatement(sqlArmor);
         try {
+            psArmor.setInt(1, getClassid());
             ResultSet rsArmor = psArmor.executeQuery();
             while (rsArmor.next()) {
                 setArmorType(getArmorType() + ", " + rsArmor.getString("name"));
@@ -591,8 +604,9 @@ public class Generate {
         }
 
         //Выбираем владение оружием
-        PreparedStatement psWeapon = c.getPreparedStatement(sqlWeapon + getClassid());
+        PreparedStatement psWeapon = c.getPreparedStatement(sqlWeapon);
         try {
+            psWeapon.setInt(1, getClassid());
             ResultSet rsWeapon = psWeapon.executeQuery();
             while (rsWeapon.next()) {
                 setWeaponType(getWeaponType() + ", " + rsWeapon.getString("name"));
@@ -602,6 +616,18 @@ public class Generate {
         } finally {
             c.closePrepareStatement(psWeapon);
         }
+
+        //Мировоззрение
+        PreparedStatement psAlign = c.getPreparedStatement(sqlAlign);
+        try {
+            ResultSet rsAlign = psAlign.executeQuery();
+            setAlignment(rsAlign.getString("alignName"));
+        } catch (SQLException e) {
+            setAlignment("");
+        } finally {
+            c.closePrepareStatement(psAlign);
+        }
+
 
         //Выбираем владение инструментами
 
