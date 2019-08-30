@@ -11,13 +11,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.scene.image.Image;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewCharController {
     DR dr = new DR();
@@ -98,6 +104,10 @@ public class NewCharController {
     @FXML private Label STLabel;
     @FXML private Label hitDiceLabel;
 
+    @FXML private Label armorLabel;
+    @FXML private Label weaponLabel;
+    @FXML private Label InstrumentsLabel;
+
     @FXML private ImageView imgVw1;
     @FXML private ImageView imgVw2;
 
@@ -133,8 +143,11 @@ public class NewCharController {
      */
     @FXML
     private void initialize() {
+
         countPane.setVisible(false);
         stPane.setVisible(false);
+
+
 
         Image image = new Image("/dnd/resource/img/avatars/ef01.jpg");
         imgVw1.setImage(image);
@@ -760,11 +773,15 @@ public class NewCharController {
 
         hitDiceLabel.setText(g.getHitDiceName());
 
+        armorLabel.setText(g.getArmorType());
+        weaponLabel.setText(g.getWeaponType());
+
 
         System.out.println(g.getRaceName());
         System.out.println(g.getSubraceName());
         System.out.println(g.getClassname());
         System.out.println(g.getHitDiceName());
+        System.out.println(g.getArmorType());
     }
 
     @FXML

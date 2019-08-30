@@ -6,6 +6,9 @@ public class Connect {
     private static Connection connection = null;
     private static final String url = "jdbc:sqlite:dnddb.db";
 
+    //TODO: подготовить переход на PostgreSQL
+    //private static final String url = "jdbc:postgresql://127.0.0.1:5432/postgres?user=postgres&password=12";
+
     //приватный класс, обеспечивающий установление подключения
     private static Connection getConnection() {
         try {

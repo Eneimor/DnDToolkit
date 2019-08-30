@@ -8,6 +8,7 @@ import javafx.beans.property.*;
  */
 
 public class Character {
+
     private final IntegerProperty id;
     private final StringProperty name;
     private final StringProperty chClass;
@@ -16,6 +17,7 @@ public class Character {
     private final StringProperty playerName;
     private final StringProperty align;
     private final BooleanProperty sex;
+
 
     private IntegerProperty level;
     private IntegerProperty exp;
@@ -58,7 +60,7 @@ public class Character {
         this.level = new SimpleIntegerProperty();
     }
 
-    //Конструктор по умолчанию с учетом харакеристик
+    //Конструктор по умолчанию с учетом характеристик
 
 
 

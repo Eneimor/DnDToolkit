@@ -10,5 +10,6 @@
     <orderEntry type="library" exported="" name="commons-net-3" level="project" />
     <orderEntry type="library" exported="" name="sqlite-jdbc-3.21.0" level="project" />
     <orderEntry type="library" exported="" name="javafx11" level="application" />
+    <orderEntry type="library" name="postgresql-42.2.6" level="project" />
   </component>
 </module>
