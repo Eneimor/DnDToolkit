@@ -108,6 +108,25 @@ public class NewCharController {
     @FXML private ImageView imgVw2;
 
 
+    //TODO: ПРЯМ ВООБЩЕ ТУДУ! СДЕЛАТЬ РАСЧЕТ СКИЛЛОВ В БД! НЕТУ ФУНКЦИОНАЛА!
+
+    /**
+     * Логика такова:
+     * при выборе класса выполняется запрос по доставанию возможных скиллов для выбранного класса.
+     * И достается количество возможных скиллов в profCounter.
+     * Наполняется ListWiev profList1.
+     * При нажатии кнопки >> выбранный элемент переносится в profList2, а из первого удаляется, и profCounter уменьшается на 1.
+     * При нажатии кнопки << наоборот.
+     *
+     * К этому нужно создать две таблицы для хранения скиллов. и хранения количества скиллов.
+     * Таблица 1. id, classid, skillid.
+     * Таблица 2. id, classid, skillcount.
+     */
+    @FXML private ListView profList1;
+    @FXML private ListView profList2;
+    @FXML private Label profCounter;
+
+
     private Stage dialogStage;
     private Character character;
 
@@ -122,6 +141,9 @@ public class NewCharController {
     ObservableList<String> align = FXCollections.observableArrayList();
     ObservableList<String> backgrounds = FXCollections.observableArrayList();
     ObservableList<String> abilCh = FXCollections.observableArrayList();
+    ObservableList<String> proficiencyList1 = FXCollections.observableArrayList();
+    ObservableList<String> proficiencyList2 = FXCollections.observableArrayList();
+
     public final String sqlPersTraits = "SELECT description FROM cl_perstraits WHERE backid= ";
     public final String sqlIdeals = "SELECT description FROM cl_ideals WHERE backid = ";
     public final String sqlBonds = "SELECT description FROM cl_bonds WHERE backid = ";

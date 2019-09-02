@@ -633,7 +633,6 @@ public class Generate {
 
 
 
-
         //Прибавляем бонусы от расы
         int[] boncharstemp = new int[6];  //временный для расчетов
         ArrayList<Integer> bonIndex = new ArrayList<>();
@@ -691,7 +690,6 @@ public class Generate {
         setSpeed(getSpeed() + getSubraceSpeedbon());
 
         //TODO: хп на следующем уровне 1 хит дайс + модификатор телосложения за каждый уровень после первого
-
 
 
         //**************************************************************************************************************

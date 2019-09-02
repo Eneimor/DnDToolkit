@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
@@ -15,6 +16,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
@@ -210,7 +212,81 @@
                         </Tab>
                         <Tab text="Proficiencies">
                             <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                                        <GridPane layoutX="30.0" layoutY="50.0" prefHeight="234.0" prefWidth="332.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="82.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="298.0" minWidth="30.0" prefWidth="136.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="15.0" prefWidth="47.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="420.0" minWidth="10.0" prefWidth="90.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="443.0" minWidth="19.0" prefWidth="64.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="49.0" minHeight="6.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label fx:id="acrLbl" text="Acrobatics" />
+                                                <Label fx:id="anLbl" text="Animal Handling" GridPane.rowIndex="1" />
+                                                <Label fx:id="arLbl" text="Arcana" GridPane.rowIndex="2" />
+                                                <Label fx:id="atLbl" text="Athletics" GridPane.rowIndex="3" />
+                                                <Label fx:id="decLbl" text="Deception" GridPane.rowIndex="4" />
+                                                <Label fx:id="hisLbl" text="History" GridPane.rowIndex="5" />
+                                                <Label fx:id="insLbl" text="Insight" GridPane.rowIndex="6" />
+                                                <Label fx:id="intLbl" text="Intimidation" GridPane.rowIndex="7" />
+                                                <Label fx:id="invLbl" text="Investigation" GridPane.rowIndex="8" />
+                                                <Label fx:id="medLbl" text="Medicine" GridPane.columnIndex="2" />
+                                                <Label fx:id="natLbl" text="Nature" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <Label fx:id="percLbl" text="Perception" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                <Label fx:id="perfLbl" text="Performance" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                                <Label fx:id="persLbl" text="Persuasion" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                                <Label fx:id="relLbl" text="Religion" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                                <Label fx:id="sohLbl" text="Sleight of Hand" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                                <Label fx:id="sthLbl" text="Stealth" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                                <Label fx:id="surLbl" text="Survival" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                                                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                                <RadioButton fx:id="acrRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" />
+                                                <RadioButton fx:id="anRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <RadioButton fx:id="arRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <RadioButton fx:id="atRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <RadioButton fx:id="percRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                <RadioButton fx:id="natRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                <RadioButton fx:id="medRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" />
+                                                <RadioButton fx:id="invRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                                <RadioButton fx:id="intRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                                <RadioButton fx:id="insRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                                <RadioButton fx:id="hisRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                                <RadioButton fx:id="decRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                <RadioButton fx:id="surRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                                                <RadioButton fx:id="sthRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                                                <RadioButton fx:id="sohRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                                                <RadioButton fx:id="relRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                                                <RadioButton fx:id="persRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                                <RadioButton fx:id="perfRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                            </children>
+                                        </GridPane>
+                              <HBox layoutX="30.0" layoutY="297.0" prefHeight="254.0" prefWidth="401.0">
+                                 <children>
+                                    <ListView fx:id="profList1" prefHeight="254.0" prefWidth="145.0" />
+                                    <Pane prefHeight="254.0" prefWidth="104.0">
+                                       <children>
+                                          <Button fx:id="toSelect" layoutX="35.0" layoutY="47.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="41.0" text="&gt;&gt;" />
+                                          <Button fx:id="fromSelect" layoutX="35.0" layoutY="127.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="41.0" text="&lt;&lt;" />
+                                       </children>
+                                    </Pane>
+                                    <ListView fx:id="profList2" prefHeight="254.0" prefWidth="157.0" />
+                                 </children>
+                              </HBox>
+                              <Label layoutX="30.0" layoutY="567.0" text="Осталось навыков" />
+                              <Label fx:id="profCounter" layoutX="156.0" layoutY="567.0" text="Label" />
+                           </children></AnchorPane>
                             </content>
                         </Tab>
                         <Tab text="Background">
@@ -339,65 +415,6 @@
                                     <Label text="Instruments" GridPane.rowIndex="4" />
                                             </children>
                                         </GridPane>
-                                        <GridPane layoutX="14.0" layoutY="439.0" prefHeight="231.0" prefWidth="354.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" prefWidth="75.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" prefWidth="75.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" prefWidth="75.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0" prefWidth="75.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="49.0" minHeight="6.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                            <children>
-                                                <Label fx:id="acrLbl" text="Acrobatics" />
-                                                <Label fx:id="anLbl" text="Animal Handling" GridPane.rowIndex="1" />
-                                                <Label fx:id="arLbl" text="Arcana" GridPane.rowIndex="2" />
-                                                <Label fx:id="atLbl" text="Athletics" GridPane.rowIndex="3" />
-                                                <Label fx:id="decLbl" text="Deception" GridPane.rowIndex="4" />
-                                                <Label fx:id="hisLbl" text="History" GridPane.rowIndex="5" />
-                                                <Label fx:id="insLbl" text="Insight" GridPane.rowIndex="6" />
-                                                <Label fx:id="intLbl" text="Intimidation" GridPane.rowIndex="7" />
-                                                <Label fx:id="invLbl" text="Investigation" GridPane.rowIndex="8" />
-                                                <Label fx:id="medLbl" text="Medicine" GridPane.columnIndex="2" />
-                                                <Label fx:id="natLbl" text="Nature" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <Label fx:id="percLbl" text="Perception" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                                <Label fx:id="perfLbl" text="Performance" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                                <Label fx:id="persLbl" text="Persuasion" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                                                <Label fx:id="relLbl" text="Religion" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                                <Label fx:id="sohLbl" text="Sleight of Hand" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                                                <Label fx:id="sthLbl" text="Stealth" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                                <Label fx:id="surLbl" text="Survival" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                                                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                                <RadioButton fx:id="acrRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" />
-                                                <RadioButton fx:id="anRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <RadioButton fx:id="arRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <RadioButton fx:id="atRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                <RadioButton fx:id="percRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                                <RadioButton fx:id="natRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                                <RadioButton fx:id="medRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" />
-                                                <RadioButton fx:id="invRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                                                <RadioButton fx:id="intRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                                                <RadioButton fx:id="insRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                                <RadioButton fx:id="hisRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                                <RadioButton fx:id="decRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                                <RadioButton fx:id="surRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-                                                <RadioButton fx:id="sthRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-                                                <RadioButton fx:id="sohRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-                                                <RadioButton fx:id="relRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                                                <RadioButton fx:id="persRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                                                <RadioButton fx:id="perfRb" disable="true" mnemonicParsing="false" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                                            </children>
-                                        </GridPane>
-                                        <Label layoutX="14.0" layoutY="407.0" text="Skills" />
                                         <ImageView fx:id="imgVw2" fitHeight="210.0" fitWidth="200.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
                                         <Label layoutX="637.0" layoutY="407.0" text="Доступно навыков:" />
                                         <Label fx:id="cntr" layoutX="752.0" layoutY="409.0" text="Label" visible="false" />
