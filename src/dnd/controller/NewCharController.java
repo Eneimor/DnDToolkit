@@ -112,15 +112,15 @@ public class NewCharController {
 
     /**
      * Логика такова:
-     * при выборе класса выполняется запрос по доставанию возможных скиллов для выбранного класса.
-     * И достается количество возможных скиллов в profCounter.
-     * Наполняется ListWiev profList1.
+     * при выборе класса выполняется запрос по доставанию возможных скиллов для выбранного класса. ++
+     * И достается количество возможных скиллов в profCounter. ++
+     * Наполняется ListView profList1. ++
      * При нажатии кнопки >> выбранный элемент переносится в profList2, а из первого удаляется, и profCounter уменьшается на 1.
      * При нажатии кнопки << наоборот.
      *
-     * К этому нужно создать две таблицы для хранения скиллов. и хранения количества скиллов.
-     * Таблица 1. id, classid, skillid.
-     * Таблица 2. id, classid, skillcount.
+     * К этому нужно создать две таблицы для хранения скиллов. и хранения количества скиллов. ++
+     * Таблица 1. id, classid, skillid. ++
+     * Таблица 2. id, classid, skillcount. ++
      */
     @FXML private ListView profList1;
     @FXML private ListView profList2;
@@ -154,6 +154,9 @@ public class NewCharController {
     public final String sqlClasses = "SELECT name FROM cl_class";
     public final String sqlAlign = "SELECT alignName FROM cl_alignment WHERE id < 10";
     public final String sqlBack = "SELECT name FROM cl_background";
+    public final String sqlSkills = "SELECT b.locname FROM class_skills a INNER JOIN cl_skills b ON a.skillid = b.id\n" +
+                                    "WHERE classid = (SELECT id FROM cl_class WHERE name = ";
+    public final String sqlSkillcounter = "SELECT skillcount FROM class_skillscount WHERE classid = (SELECT id FROM cl_class WHERE name = ";
 
     /**
      * Инициализирует класс-контроллер. Этот метод вызывается автоматически
@@ -161,7 +164,6 @@ public class NewCharController {
      */
     @FXML
     private void initialize() {
-
         countPane.setVisible(false);
         stPane.setVisible(false);
 
@@ -202,6 +204,7 @@ public class NewCharController {
             ResultSet rs3 = ps2.executeQuery();
             ResultSet rs4 = ps3.executeQuery();
 
+
             while (rs1.next()) {
                 races.add(rs1.getString("racename"));
             }
@@ -214,13 +217,20 @@ public class NewCharController {
             while (rs4.next()) {
                 backgrounds.add(rs4.getString("name"));
             }
+
             raceChoice.setItems(races);
             classChoice.setItems(classes);
             alignChoice.setItems(align);
             backChoice.setItems(backgrounds);
 
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            connect.closePrepareStatement(ps);
+            connect.closePrepareStatement(ps1);
+            connect.closePrepareStatement(ps2);
+            connect.closePrepareStatement(ps3);
         }
         abilCh.add("Manual Choice");
         abilCh.add("Point Buy");
@@ -323,258 +333,27 @@ public class NewCharController {
                 String getClassVal = (String) classChoice.getValue();
                 PreparedStatement ps3 = connect.getPreparedStatement("SELECT description FROM cl_class WHERE name = "
                         + "\"" + getClassVal + "\"");
-                /*
+                PreparedStatement psSkills = connect.getPreparedStatement(sqlSkills + "\"" + getClassVal + "\");");
+                PreparedStatement psClassCount = connect.getPreparedStatement(sqlSkillcounter + "\"" + getClassVal + "\");");
                 try {
+                    ResultSet rsSkills = psSkills.executeQuery();
+                    ResultSet rsSkillCount = psClassCount.executeQuery();
                     ResultSet rs3 = ps3.executeQuery();
                     clTxt.setText(rs3.getString("description"));
+                    if (!proficiencyList1.isEmpty()) proficiencyList1.clear();
+                    while (rsSkills.next()) {
+                        proficiencyList1.add(rsSkills.getString("locname"));
+                    }
+                    profList1.setItems(proficiencyList1);
+                    profCounter.setText(String.valueOf(rsSkillCount.getInt("skillcount")));
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } finally {
+                    connect.closePrepareStatement(psSkills);
+                    connect.closePrepareStatement(psClassCount);
+                    connect.closePrepareStatement(ps3);
                 }
-                int counter;
-                switch (getClassVal) {
-                    case "Бард":
-                        setDisable();
-                        acrRb.setDisable(false);
-                        anRb.setDisable(false);
-                        arRb.setDisable(false);
-                        atRb.setDisable(false);
-                        decRb.setDisable(false);
-                        hisRb.setDisable(false);
-                        insRb.setDisable(false);
-                        intRb.setDisable(false);
-                        invRb.setDisable(false);
-                        medRb.setDisable(false);
-                        natRb.setDisable(false);
-                        percRb.setDisable(false);
-                        perfRb.setDisable(false);
-                        persRb.setDisable(false);
-                        relRb.setDisable(false);
-                        sohRb.setDisable(false);
-                        sthRb.setDisable(false);
-                        surRb.setDisable(false);
-                        acrRb.setVisible(true);
-                        anRb.setVisible(true);
-                        arRb.setVisible(true);
-                        atRb.setVisible(true);
-                        decRb.setVisible(true);
-                        hisRb.setVisible(true);
-                        insRb.setVisible(true);
-                        intRb.setVisible(true);
-                        invRb.setVisible(true);
-                        medRb.setVisible(true);
-                        natRb.setVisible(true);
-                        percRb.setVisible(true);
-                        perfRb.setVisible(true);
-                        persRb.setVisible(true);
-                        relRb.setVisible(true);
-                        sohRb.setVisible(true);
-                        sthRb.setVisible(true);
-                        surRb.setVisible(true);
-                        setCntr(3);
-                        break;
-                    case "Варвар":
-                        setDisable();
-                        atRb.setDisable(false);
-                        percRb.setDisable(false);
-                        surRb.setDisable(false);
-                        intRb.setDisable(false);
-                        natRb.setDisable(false);
-                        anRb.setDisable(false);
-                        atRb.setVisible(true);
-                        percRb.setVisible(true);
-                        surRb.setVisible(true);
-                        intRb.setVisible(true);
-                        natRb.setVisible(true);
-                        anRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Воин":
-                        setDisable();
-                        acrRb.setDisable(false);
-                        atRb.setDisable(false);
-                        percRb.setDisable(false);
-                        surRb.setDisable(false);
-                        intRb.setDisable(false);
-                        hisRb.setDisable(false);
-                        insRb.setDisable(false);
-                        anRb.setDisable(false);
-                        acrRb.setVisible(true);
-                        atRb.setVisible(true);
-                        percRb.setVisible(true);
-                        surRb.setVisible(true);
-                        intRb.setVisible(true);
-                        hisRb.setVisible(true);
-                        insRb.setVisible(true);
-                        anRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Волшебник":
-                        setDisable();
-                        invRb.setDisable(false);
-                        hisRb.setDisable(false);
-                        arRb.setDisable(false);
-                        medRb.setDisable(false);
-                        insRb.setDisable(false);
-                        relRb.setDisable(false);
-                        invRb.setVisible(true);
-                        hisRb.setVisible(true);
-                        arRb.setVisible(true);
-                        medRb.setVisible(true);
-                        insRb.setVisible(true);
-                        relRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Друид":
-                        setDisable();
-                        percRb.setDisable(false);
-                        surRb.setDisable(false);
-                        arRb.setDisable(false);
-                        medRb.setDisable(false);
-                        anRb.setDisable(false);
-                        natRb.setDisable(false);
-                        insRb.setDisable(false);
-                        relRb.setDisable(false);
-                        percRb.setVisible(true);
-                        surRb.setVisible(true);
-                        arRb.setVisible(true);
-                        medRb.setVisible(true);
-                        anRb.setVisible(true);
-                        natRb.setVisible(true);
-                        insRb.setVisible(true);
-                        relRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Жрец":
-                        setDisable();
-                        hisRb.setDisable(false);
-                        medRb.setDisable(false);
-                        insRb.setDisable(false);
-                        relRb.setDisable(false);
-                        persRb.setDisable(false);
-                        hisRb.setVisible(true);
-                        medRb.setVisible(true);
-                        insRb.setVisible(true);
-                        relRb.setVisible(true);
-                        persRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Колдун":
-                        setDisable();
-                        invRb.setDisable(false);
-                        intRb.setDisable(false);
-                        hisRb.setDisable(false);
-                        arRb.setDisable(false);
-                        decRb.setDisable(false);
-                        natRb.setDisable(false);
-                        relRb.setDisable(false);
-                        invRb.setVisible(true);
-                        intRb.setVisible(true);
-                        hisRb.setVisible(true);
-                        arRb.setVisible(true);
-                        decRb.setVisible(true);
-                        natRb.setVisible(true);
-                        relRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Монах":
-                        setDisable();
-                        acrRb.setDisable(false);
-                        atRb.setDisable(false);
-                        hisRb.setDisable(false);
-                        insRb.setDisable(false);
-                        relRb.setDisable(false);
-                        sthRb.setDisable(false);
-                        acrRb.setVisible(true);
-                        atRb.setVisible(true);
-                        hisRb.setVisible(true);
-                        insRb.setVisible(true);
-                        relRb.setVisible(true);
-                        sthRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Паладин":
-                        setDisable();
-                        atRb.setDisable(false);
-                        intRb.setDisable(false);
-                        medRb.setDisable(false);
-                        insRb.setDisable(false);
-                        relRb.setDisable(false);
-                        persRb.setDisable(false);
-                        atRb.setVisible(true);
-                        intRb.setVisible(true);
-                        medRb.setVisible(true);
-                        insRb.setVisible(true);
-                        relRb.setVisible(true);
-                        persRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                    case "Плут":
-                        setDisable();
-                        acrRb.setDisable(false);
-                        invRb.setDisable(false);
-                        atRb.setDisable(false);
-                        percRb.setDisable(false);
-                        perfRb.setDisable(false);
-                        intRb.setDisable(false);
-                        sohRb.setDisable(false);
-                        decRb.setDisable(false);
-                        insRb.setDisable(false);
-                        sthRb.setDisable(false);
-                        persRb.setDisable(false);
-                        acrRb.setVisible(true);
-                        invRb.setVisible(true);
-                        atRb.setVisible(true);
-                        percRb.setVisible(true);
-                        perfRb.setVisible(true);
-                        intRb.setVisible(true);
-                        sohRb.setVisible(true);
-                        decRb.setVisible(true);
-                        insRb.setVisible(true);
-                        sthRb.setVisible(true);
-                        persRb.setVisible(true);
-                        setCntr(4);
-                        break;
-                    case "Следопыт":
-                        setDisable();
-                        invRb.setDisable(false);
-                        atRb.setDisable(false);
-                        percRb.setDisable(false);
-                        surRb.setDisable(false);
-                        natRb.setDisable(false);
-                        insRb.setDisable(false);
-                        sthRb.setDisable(false);
-                        anRb.setDisable(false);
-                        invRb.setVisible(true);
-                        atRb.setVisible(true);
-                        percRb.setVisible(true);
-                        surRb.setVisible(true);
-                        natRb.setVisible(true);
-                        insRb.setVisible(true);
-                        sthRb.setVisible(true);
-                        anRb.setVisible(true);
-                        setCntr(3);
-                        break;
-                    case "Чародей":
-                        setDisable();
-                        intRb.setDisable(false);
-                        arRb.setDisable(false);
-                        decRb.setDisable(false);
-                        insRb.setDisable(false);
-                        relRb.setDisable(false);
-                        persRb.setDisable(false);
-                        intRb.setVisible(true);
-                        arRb.setVisible(true);
-                        decRb.setVisible(true);
-                        insRb.setVisible(true);
-                        relRb.setVisible(true);
-                        persRb.setVisible(true);
-                        setCntr(2);
-                        break;
-                }
-                */
             }
-
-
         });
 
 
@@ -645,48 +424,6 @@ public class NewCharController {
 
     //TODO: методы для определения уровня и бонуса мастерства
     //TODO: начисление хп
-
-
-
-    //метод выключающий все радиобаттоны
-    private void setDisable() {
-        acrRb.setVisible(false);
-        anRb.setVisible(false);
-        arRb.setVisible(false);
-        atRb.setVisible(false);
-        decRb.setVisible(false);
-        hisRb.setVisible(false);
-        insRb.setVisible(false);
-        intRb.setVisible(false);
-        invRb.setVisible(false);
-        medRb.setVisible(false);
-        natRb.setVisible(false);
-        percRb.setVisible(false);
-        perfRb.setVisible(false);
-        persRb.setVisible(false);
-        relRb.setVisible(false);
-        sohRb.setVisible(false);
-        sthRb.setVisible(false);
-        surRb.setVisible(false);
-        acrRb.setDisable(true);
-        anRb.setDisable(true);
-        arRb.setDisable(true);
-        atRb.setDisable(true);
-        decRb.setDisable(true);
-        hisRb.setDisable(true);
-        insRb.setDisable(true);
-        intRb.setDisable(true);
-        invRb.setDisable(true);
-        medRb.setDisable(true);
-        natRb.setDisable(true);
-        percRb.setDisable(true);
-        perfRb.setDisable(true);
-        persRb.setDisable(true);
-        relRb.setDisable(true);
-        sohRb.setDisable(true);
-        sthRb.setDisable(true);
-        surRb.setDisable(true);
-    }
 
 
 
@@ -793,7 +530,6 @@ public class NewCharController {
         weaponLabel.setText(g.getWeaponType());
 
 
-
         System.out.println(g.getRaceName());
         System.out.println(g.getSubraceName());
         System.out.println(g.getClassname());
@@ -881,6 +617,17 @@ public class NewCharController {
     @FXML
     void previousPicture(ActionEvent event) {
 
+    }
+
+
+
+    @FXML
+    void addSkill() {
+        String s = (String) profList1.getSelectionModel().getSelectedItem();
+        proficiencyList2.add(s);
+        proficiencyList1.remove(s);
+        profList1.setItems(proficiencyList1);
+        profList2.setItems(proficiencyList2);
     }
 
 

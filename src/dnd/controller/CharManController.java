@@ -143,7 +143,6 @@ public class CharManController {
             expLab.setText("");
             idLab.setText("");
 
-
             strLb.setText("");
             dexLb.setText("");
             conLb.setText("");
@@ -152,6 +151,7 @@ public class CharManController {
             chaLb.setText("");
         }
     }
+
 
     @FXML
     void newChar(ActionEvent event) {

@@ -277,7 +277,7 @@
                                     <ListView fx:id="profList1" prefHeight="254.0" prefWidth="145.0" />
                                     <Pane prefHeight="254.0" prefWidth="104.0">
                                        <children>
-                                          <Button fx:id="toSelect" layoutX="35.0" layoutY="47.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="41.0" text="&gt;&gt;" />
+                                          <Button fx:id="toSelect" layoutX="35.0" layoutY="47.0" mnemonicParsing="false" onAction="#addSkill" prefHeight="66.0" prefWidth="41.0" text="&gt;&gt;" />
                                           <Button fx:id="fromSelect" layoutX="35.0" layoutY="127.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="41.0" text="&lt;&lt;" />
                                        </children>
                                     </Pane>
