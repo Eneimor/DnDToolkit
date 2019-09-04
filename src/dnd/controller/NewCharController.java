@@ -125,6 +125,7 @@ public class NewCharController {
     @FXML private ListView profList1;
     @FXML private ListView profList2;
     @FXML private Label profCounter;
+    @FXML private Label skillLabel;
 
 
     private Stage dialogStage;
@@ -621,13 +622,47 @@ public class NewCharController {
 
 
 
+    //TODO: доработать эти два метода. В целом работают, но снова проблема с пустыми значениями в Label
     @FXML
     void addSkill() {
-        String s = (String) profList1.getSelectionModel().getSelectedItem();
-        proficiencyList2.add(s);
-        proficiencyList1.remove(s);
-        profList1.setItems(proficiencyList1);
-        profList2.setItems(proficiencyList2);
+        int a = Integer.parseInt(profCounter.getText());
+        if (a > 0) {
+            String s = (String) profList1.getSelectionModel().getSelectedItem();
+            proficiencyList2.add(s);
+            proficiencyList1.remove(s);
+            profList1.setItems(proficiencyList1);
+            profList2.setItems(proficiencyList2);
+            a--;
+            profCounter.setText(String.valueOf(a));
+            skillLabel.setText(skillLabel.getText() + ", " + s);
+        }
+    }
+
+    @FXML
+    void removeSkill() {
+        int a = Integer.parseInt(profCounter.getText());
+        if (profList2.getSelectionModel().getSelectedItem()!=null) {
+            String s = (String) profList2.getSelectionModel().getSelectedItem();
+            proficiencyList1.add(s);
+            proficiencyList2.remove(s);
+            profList1.setItems(proficiencyList1);
+            profList2.setItems(proficiencyList2);
+            a++;
+            profCounter.setText(String.valueOf(a));
+
+            skillLabel.setText("");
+            for (int i = 0; i < proficiencyList2.size(); i++) {
+                if (skillLabel.getText().isEmpty()) {
+                    skillLabel.setText(proficiencyList2.get(i));
+                    skillLabel.setText(skillLabel.getText() + ", ");
+                }
+                else {
+                    skillLabel.setText(skillLabel.getText() + ", " + proficiencyList2.get(i));
+                }
+            }
+
+
+        }
     }
 
 
