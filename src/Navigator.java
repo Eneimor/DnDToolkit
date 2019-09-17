@@ -32,6 +32,7 @@ public class Navigator {
     public static final String MISC = "dnd/view/Generators.fxml";
     public static final String NWSPL = "dnd/view/newSpell.fxml";
     public static final String NWBST = "dnd/view/newBeast.fxml";
+    public static final String SHWCHARACTER = "dnd/view/showCharacter.fxml";
 
     /** Главный контроллер слоев */
     private static MainController mainController;

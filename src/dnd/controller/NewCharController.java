@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -108,25 +109,12 @@ public class NewCharController {
     @FXML private ImageView imgVw2;
 
 
-    //TODO: ПРЯМ ВООБЩЕ ТУДУ! СДЕЛАТЬ РАСЧЕТ СКИЛЛОВ В БД! НЕТУ ФУНКЦИОНАЛА!
-
-    /**
-     * Логика такова:
-     * при выборе класса выполняется запрос по доставанию возможных скиллов для выбранного класса. ++
-     * И достается количество возможных скиллов в profCounter. ++
-     * Наполняется ListView profList1. ++
-     * При нажатии кнопки >> выбранный элемент переносится в profList2, а из первого удаляется, и profCounter уменьшается на 1.
-     * При нажатии кнопки << наоборот.
-     *
-     * К этому нужно создать две таблицы для хранения скиллов. и хранения количества скиллов. ++
-     * Таблица 1. id, classid, skillid. ++
-     * Таблица 2. id, classid, skillcount. ++
-     */
     @FXML private ListView profList1;
     @FXML private ListView profList2;
     @FXML private Label profCounter;
     @FXML private Label skillLabel;
 
+    @FXML private ScrollPane dsa;
 
     private Stage dialogStage;
     private Character character;
@@ -158,6 +146,7 @@ public class NewCharController {
     public final String sqlSkills = "SELECT b.locname FROM class_skills a INNER JOIN cl_skills b ON a.skillid = b.id\n" +
                                     "WHERE classid = (SELECT id FROM cl_class WHERE name = ";
     public final String sqlSkillcounter = "SELECT skillcount FROM class_skillscount WHERE classid = (SELECT id FROM cl_class WHERE name = ";
+    public final String sqlEquipment = "select equipvar, description from class_equip where classid = ";
 
     /**
      * Инициализирует класс-контроллер. Этот метод вызывается автоматически
@@ -354,6 +343,21 @@ public class NewCharController {
                     connect.closePrepareStatement(psClassCount);
                     connect.closePrepareStatement(ps3);
                 }
+
+
+                //Делаем отображение инвентаря
+                for (int i = 0; i < 3; i++) {
+                    dsa.setContent(new Pane());
+                    dsa.getContent().setId("sdf");
+                }
+
+                Label l = new Label();
+                dsa.setContent(l);
+                l.setText("Test");
+
+
+
+
             }
         });
 
@@ -637,6 +641,14 @@ public class NewCharController {
             skillLabel.setText(skillLabel.getText() + ", " + s);
         }
     }
+
+    ///TODO: лайфстайл добавить, физические характеристики (волосы, кожа, глаза, высота, вес, возраст, гендер
+    // TODO: заметки: ORGANIZATIONS, ALLIES, ENEMIES, BACKSTORY, OTHER
+    /**
+     * ЭКВИП:
+     * ЗОЛОТО ИЛИ ЭКВИПМЕНТ
+     * ЕСЛИ ЗОЛОТО, ТО
+     * */
 
     @FXML
     void removeSkill() {
