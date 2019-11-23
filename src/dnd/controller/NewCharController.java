@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+
 public class NewCharController {
     DR dr = new DR();
     Race race = new Race();
