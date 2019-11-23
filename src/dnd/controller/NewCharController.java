@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.PreparedStatement;
@@ -114,7 +115,9 @@ public class NewCharController {
     @FXML private Label profCounter;
     @FXML private Label skillLabel;
 
-    @FXML private ScrollPane dsa;
+
+    @FXML private AnchorPane apne;
+    @FXML private VBox vbxOuter;
 
     private Stage dialogStage;
     private Character character;
@@ -182,6 +185,8 @@ public class NewCharController {
         intModLabel.setText("-1");
         wisModLabel.setText("-1");
         chaModLabel.setText("-1");
+
+
 
         Connect connect = new Connect();
         PreparedStatement ps = connect.getPreparedStatement(sqlRaces);
@@ -346,20 +351,17 @@ public class NewCharController {
 
 
                 //Делаем отображение инвентаря
-                for (int i = 0; i < 3; i++) {
-                    dsa.setContent(new Pane());
-                    dsa.getContent().setId("sdf");
+                //apne.getChildren().add(vbxOuter);
+
+                int numberOfInnerBoxes = 3;
+
+                for(int i = 0; i<numberOfInnerBoxes ; i++){
+                    vbxOuter.getChildren().add(new VBox(i+1));
                 }
-
-                Label l = new Label();
-                dsa.setContent(l);
-                l.setText("Test");
-
-
-
 
             }
         });
+
 
 
 
@@ -676,7 +678,6 @@ public class NewCharController {
 
         }
     }
-
 
 
     @FXML

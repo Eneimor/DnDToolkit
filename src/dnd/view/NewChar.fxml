@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
@@ -19,6 +18,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.35" minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="NewCharController">
@@ -242,9 +242,9 @@
                         </Tab>
                         <Tab text="Equipment">
                             <content>
-                                <AnchorPane fx:id="ddd" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane fx:id="apne" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ScrollPane fx:id="dsa" prefHeight="649.0" prefWidth="444.0" />
+                              <VBox fx:id="vbxOuter" prefHeight="648.0" prefWidth="444.0" />
                            </children></AnchorPane>
                             </content>
                         </Tab>
