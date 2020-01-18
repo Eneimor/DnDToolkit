@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 /**
- * Главные класс приложения
+ * Главный класс приложения
  */
 public class Main extends Application {
 
@@ -41,7 +41,7 @@ public class Main extends Application {
         MainController mainController = loader.getController();
 
         Navigator.setMainController(mainController);
-        Navigator.loadScreen(Navigator.NCH);//MMENU);
+        Navigator.loadScreen(Navigator.NCH); //MMENU);
 
         return mainPane;
     }

@@ -15,38 +15,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SpellManController {
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private Label castLabel;
-    @FXML
-    private Label distanceLabel;
-    @FXML
-    private Label compLabel;
-    @FXML
-    private Label durLabel;
-    @FXML
-    private ListView lstView;
-    @FXML
-    private TextArea descText;
-    @FXML
-    private RadioButton onelvlBtn;
-    @FXML
-    private RadioButton twolvlBtn;
-    @FXML
-    private RadioButton threelvlBtn;
-    @FXML
-    private RadioButton fourlvlBtn;
-    @FXML
-    private RadioButton fivelvlBtn;
-    @FXML
-    private RadioButton sixlvlBtn;
-    @FXML
-    private RadioButton svnlvlBtn;
-    @FXML
-    private RadioButton eightlvlBtn;
-    @FXML
-    private RadioButton ninelvlBtn;
+    @FXML private Label nameLabel;
+    @FXML private Label castLabel;
+    @FXML private Label distanceLabel;
+    @FXML private Label compLabel;
+    @FXML private Label durLabel;
+    @FXML private ListView lstView;
+    @FXML private TextArea descText;
+    @FXML private RadioButton onelvlBtn;
+    @FXML private RadioButton twolvlBtn;
+    @FXML private RadioButton threelvlBtn;
+    @FXML private RadioButton fourlvlBtn;
+    @FXML private RadioButton fivelvlBtn;
+    @FXML private RadioButton sixlvlBtn;
+    @FXML private RadioButton svnlvlBtn;
+    @FXML private RadioButton eightlvlBtn;
+    @FXML private RadioButton ninelvlBtn;
     @FXML private RadioButton barbarButton;
     @FXML private RadioButton bardButton;
     @FXML private RadioButton priestButton;

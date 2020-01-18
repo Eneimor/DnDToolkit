@@ -13,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -48,24 +47,6 @@ public class NewCharController {
     @FXML private Label wisLabel1;
     @FXML private Label chaLabel1;
 
-    @FXML private RadioButton acrRb;
-    @FXML private RadioButton anRb;
-    @FXML private RadioButton arRb;
-    @FXML private RadioButton atRb;
-    @FXML private RadioButton decRb;
-    @FXML private RadioButton hisRb;
-    @FXML private RadioButton insRb;
-    @FXML private RadioButton intRb;
-    @FXML private RadioButton invRb;
-    @FXML private RadioButton medRb;
-    @FXML private RadioButton natRb;
-    @FXML private RadioButton percRb;
-    @FXML private RadioButton perfRb;
-    @FXML private RadioButton persRb;
-    @FXML private RadioButton relRb;
-    @FXML private RadioButton sohRb;
-    @FXML private RadioButton sthRb;
-    @FXML private RadioButton surRb;
     @FXML private Label ststLb;
 
     @FXML private Label cntr;
@@ -116,8 +97,6 @@ public class NewCharController {
     @FXML private Label profCounter;
     @FXML private Label skillLabel;
 
-
-    @FXML private AnchorPane apne;
     @FXML private VBox vbxOuter;
 
     private Stage dialogStage;
@@ -148,9 +127,14 @@ public class NewCharController {
     public final String sqlAlign = "SELECT alignName FROM cl_alignment WHERE id < 10";
     public final String sqlBack = "SELECT name FROM cl_background";
     public final String sqlSkills = "SELECT b.locname FROM class_skills a INNER JOIN cl_skills b ON a.skillid = b.id\n" +
-                                    "WHERE classid = (SELECT id FROM cl_class WHERE name = ";
+            "WHERE classid = (SELECT id FROM cl_class WHERE name = ";
     public final String sqlSkillcounter = "SELECT skillcount FROM class_skillscount WHERE classid = (SELECT id FROM cl_class WHERE name = ";
-    public final String sqlEquipment = "select equipvar, description from class_equip where classid = ";
+
+    public final String sqlPaneCnt = "select  count(distinct panCounter) as cnt FROM class_equip where classid = (SELECT id FROM cl_class WHERE name = ";
+    public final String sqlEquipment = "select count(distinct equipvar) as equipvar FROM class_equip where classid = (SELECT id FROM cl_class WHERE name =";
+    public final String sqlGetEquipVar = "select description from class_equip where classid = (SELECT id FROM cl_class WHERE name =";
+
+    public final String sqlGetEquip = "select description from class_equip where classid = (SELECT id FROM cl_class WHERE name =";
 
     /**
      * Инициализирует класс-контроллер. Этот метод вызывается автоматически
@@ -189,6 +173,7 @@ public class NewCharController {
 
 
 
+        //Наполняем списки
         Connect connect = new Connect();
         PreparedStatement ps = connect.getPreparedStatement(sqlRaces);
         PreparedStatement ps1 = connect.getPreparedStatement(sqlClasses);
@@ -258,7 +243,6 @@ public class NewCharController {
         });
 
 
-
         //Слушатель для рас
         raceChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
@@ -271,14 +255,14 @@ public class NewCharController {
                     //TODO: разобраться с NullPointerException при загрузке выпадающего списка подрас
                     PreparedStatement ps = connect.getPreparedStatement(sqlSubraces + "\"" + getRaceVal + "\")");
 
-                        if (subraceChoice.getItems().isEmpty()) {
-                            getSubraces(ps);
-                            subraceChoice.setItems(subraces);
-                        } else {
-                            subraces.clear();
-                            getSubraces(ps);
-                            subraceChoice.setItems(subraces);
-                        }
+                    if (subraceChoice.getItems().isEmpty()) {
+                        getSubraces(ps);
+                        subraceChoice.setItems(subraces);
+                    } else {
+                        subraces.clear();
+                        getSubraces(ps);
+                        subraceChoice.setItems(subraces);
+                    }
 
                     PreparedStatement ps2 = connect.getPreparedStatement("SELECT description FROM cl_race WHERE racename ="
                             + "\"" + getRaceVal + "\"");
@@ -301,7 +285,8 @@ public class NewCharController {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 String getSubRaceVal = (String) subraceChoice.getValue();
-                /*
+                //TODO: посмотреть что тут за ошибка выпадает
+/*
                 if (newValue.equals(getSubRaceVal)) {
                     PreparedStatement ps3 = connect.getPreparedStatement("SELECT description FROM cl_subrace WHERE subracename ="
                             + "\"" + getSubRaceVal + "\"");
@@ -315,8 +300,9 @@ public class NewCharController {
                         }
                     } catch (SQLException e) {
                         e.printStackTrace();
+                    } finally {
+                        connect.closePrepareStatement(ps3);
                     }
-
                 }
 */
             }
@@ -337,6 +323,7 @@ public class NewCharController {
                     ResultSet rs3 = ps3.executeQuery();
                     clTxt.setText(rs3.getString("description"));
                     if (!proficiencyList1.isEmpty()) proficiencyList1.clear();
+                    if (!proficiencyList2.isEmpty()) proficiencyList2.clear();
                     while (rsSkills.next()) {
                         proficiencyList1.add(rsSkills.getString("locname"));
                     }
@@ -351,8 +338,112 @@ public class NewCharController {
                 }
 
 
-                //Делаем отображение инвентаря
-                //apne.getChildren().add(vbxOuter);
+                PreparedStatement psNumOfBoxes = connect.getPreparedStatement(sqlPaneCnt + "\"" + getClassVal + "\");");
+
+                int numOfBoxes;
+                int numOfVars;
+                try {
+                    ResultSet rsBoxCount = psNumOfBoxes.executeQuery();
+                    numOfBoxes = rsBoxCount.getInt("cnt");
+                    Pane[] pane = new Pane[numOfBoxes];
+                    ToggleGroup[] equipToggleGroup = new ToggleGroup[numOfBoxes];
+                    String[] equipMassive = new String[numOfBoxes];
+
+                    if (!vbxOuter.getChildren().isEmpty()) vbxOuter.getChildren().clear();
+                    for(int i = 0; i < numOfBoxes; i++) {
+                        PreparedStatement psNumOfVars = connect.getPreparedStatement(sqlEquipment + "\"" + getClassVal + "\")" + " AND panCounter = " + (i+1) +";");
+
+                        try {
+                            ResultSet rsCon = psNumOfVars.executeQuery();
+                            numOfVars = rsCon.getInt("equipvar");
+
+                            //тут создаем и добавляем панель
+                            pane[i] = new Pane();
+                            pane[i].setPrefHeight(60);
+                            pane[i].setPrefWidth(vbxOuter.getPrefWidth() - 20);
+                            pane[i].setLayoutX(vbxOuter.getLayoutX());
+                            pane[i].setLayoutY(i * 30);
+                            vbxOuter.setSpacing(5);
+                            vbxOuter.getChildren().add(pane[i]);
+
+                            RadioButton[] equipRadioButton = new RadioButton[numOfVars];
+
+
+                            //в панель кидаем всякое говно
+                            for (int j = 0; j < numOfVars; j++) {
+                                PreparedStatement psEquipVar = connect.getPreparedStatement(sqlGetEquipVar + "\"" + getClassVal + "\") AND panCounter = " + (i+1) + " AND equipvar = " + (j+1) + ";");
+                                try {
+                                    ResultSet rsEquipVar = psEquipVar.executeQuery();
+                                    equipRadioButton[j] = new RadioButton(rsEquipVar.getString("description"));
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    connect.closePrepareStatement(psEquipVar);
+                                }
+                                pane[i].getChildren().add(equipRadioButton[j]);
+                                equipRadioButton[j].setLayoutX(35);
+                                equipRadioButton[j].setLayoutY(20 * j);
+                                if (equipToggleGroup[i] == null) {
+                                    equipToggleGroup[i] = new ToggleGroup();
+                                }
+                                equipRadioButton[j].setToggleGroup(equipToggleGroup[i]);
+                            }
+
+                            int finalI = i;
+                            equipToggleGroup[i].selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+                                @Override
+                                public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                                    if (equipToggleGroup[finalI].getSelectedToggle() != null) {
+                                        RadioButton rb = (RadioButton) equipToggleGroup[finalI].getSelectedToggle();
+                                        equipMassive[finalI] = rb.getText();
+                                    }
+                                }
+                            });
+
+
+                            /*ВАРИАНТ С ЧОЙЗБОКСАМИ*/
+/*
+                                ChoiceBox[] equipChoiceBox = new ChoiceBox[numOfBoxes];
+                                ObservableList<String> equipmentObsList = FXCollections.observableArrayList();
+
+                                    PreparedStatement psGetEquip = connect.getPreparedStatement(sqlGetEquip + "\"" + getClassVal + "\") AND panCounter = " + (i+1) + " ORDER BY 1 ;");
+                                    try {
+                                        ResultSet rsGetEquip = psGetEquip.executeQuery();
+                                        System.out.println(rsGetEquip.getString("description"));
+                                        while (rsGetEquip.next()) {
+                                            equipmentObsList.add(rsGetEquip.getString("description"));
+                                        }
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        connect.closePrepareStatement(psGetEquip);
+                                    }
+
+
+                                if (equipChoiceBox[i] == null) {
+                                    equipChoiceBox[i] = new ChoiceBox();
+                                }
+                                pane[i].getChildren().add(equipChoiceBox[i]);
+                                equipChoiceBox[i].setLayoutX(50);
+                                equipChoiceBox[i].setLayoutY(20);
+                                equipChoiceBox[i].setPrefWidth(250);
+                                equipChoiceBox[i].setPrefHeight(30);
+                                equipChoiceBox[i].setItems(equipmentObsList);
+                                */
+//идем к следующей
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        } finally {
+                            connect.closePrepareStatement(psNumOfVars);
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    connect.closePrepareStatement(psNumOfBoxes);
+                }
 
                 int numberOfInnerBoxes = 3;
 
@@ -362,8 +453,6 @@ public class NewCharController {
 
             }
         });
-
-
 
 
         //Слушатель для бэкграундов
