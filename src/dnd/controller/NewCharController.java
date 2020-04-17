@@ -1,9 +1,7 @@
 import dnd.Utils.Buttons;
 import dnd.Utils.Connect;
-import dnd.Utils.DR;
 import dnd.Utils.Generate;
 import dnd.model.Character;
-import dnd.model.Race;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,13 +18,10 @@ import javafx.stage.Stage;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.Random;
 
 
 public class NewCharController {
-    DR dr = new DR();
-    Race race = new Race();
-
     @FXML private Label strLabel;
     @FXML private Label dexLabel;
     @FXML private Label conLabel;
@@ -39,16 +34,13 @@ public class NewCharController {
     @FXML private Label intModLabel;
     @FXML private Label wisModLabel;
     @FXML private Label chaModLabel;
-
     @FXML private Label strLabel1;
     @FXML private Label dexLabel1;
     @FXML private Label conLabel1;
     @FXML private Label intLabel1;
     @FXML private Label wisLabel1;
     @FXML private Label chaLabel1;
-
     @FXML private Label ststLb;
-
     @FXML private Label cntr;
     @FXML private Label nameLabel;
     @FXML private TextArea txtFld;
@@ -57,53 +49,50 @@ public class NewCharController {
     @FXML private ChoiceBox raceChoice;
     @FXML private ChoiceBox classChoice;
     @FXML private ChoiceBox abilityChoice;
-
     @FXML private ChoiceBox subraceChoice;
     @FXML private ChoiceBox lvlChoice;
     @FXML private ChoiceBox alignChoice;
     @FXML private ChoiceBox backChoice;
-
     @FXML private ChoiceBox perstrtChoice;
     @FXML private ChoiceBox idealChoice;
     @FXML private ChoiceBox bondChoice;
     @FXML private ChoiceBox flawChoice;
-
     @FXML private Pane countPane;
     @FXML private Pane stPane;
-
     @FXML private TextField strTF;
     @FXML private TextField dexTF;
     @FXML private TextField conTF;
     @FXML private TextField intTF;
     @FXML private TextField wisTF;
     @FXML private TextField chaTF;
-
     @FXML private Label profBonusLabel;
     @FXML private Label speedLabel;
     @FXML private Label maxhpLabel;
     @FXML private Label STLabel;
     @FXML private Label hitDiceLabel;
-
     @FXML private Label armorLabel;
     @FXML private Label weaponLabel;
     @FXML private Label InstrumentsLabel;
-
     @FXML private ImageView imgVw1;
     @FXML private ImageView imgVw2;
-
-
     @FXML private ListView profList1;
     @FXML private ListView profList2;
     @FXML private Label profCounter;
     @FXML private Label skillLabel;
-
     @FXML private VBox vbxOuter;
 
     private Stage dialogStage;
     private Character character;
 
     private boolean okClicked = false;
+    private int skillcnt;
+    private int numOfVars;      //колчество вариантов в одной инвентарной группе
+    private int countOfPans;    //количество групп инвентаря
+    private String[][] equipmentVariants; //массив из которого будем брать все значения
+    private ComboBox<String>[] equipBox;
+    private ObservableList equipList[];
 
+    //основополагающая переменная для айдишника класса
 
 
     ObservableList<String> races = FXCollections.observableArrayList();
@@ -115,25 +104,28 @@ public class NewCharController {
     ObservableList<String> abilCh = FXCollections.observableArrayList();
     ObservableList<String> proficiencyList1 = FXCollections.observableArrayList();
     ObservableList<String> proficiencyList2 = FXCollections.observableArrayList();
+    ObservableList<String> equipment = FXCollections.observableArrayList();
 
     public final String sqlPersTraits = "SELECT description FROM cl_perstraits WHERE backid= ";
     public final String sqlIdeals = "SELECT description FROM cl_ideals WHERE backid = ";
     public final String sqlBonds = "SELECT description FROM cl_bonds WHERE backid = ";
     public final String sqlFlaws = "SELECT description FROM cl_flaws WHERE backid = ";
-
     public final String sqlRaces = "SELECT racename FROM cl_race";
     public final String sqlSubraces = "SELECT subracename FROM cl_subrace WHERE raceid = (SELECT id FROM cl_race WHERE racename = ";
     public final String sqlClasses = "SELECT name FROM cl_class";
     public final String sqlAlign = "SELECT alignName FROM cl_alignment WHERE id < 10";
     public final String sqlBack = "SELECT name FROM cl_background";
-    public final String sqlSkills = "SELECT b.locname FROM class_skills a INNER JOIN cl_skills b ON a.skillid = b.id\n" +
-            "WHERE classid = (SELECT id FROM cl_class WHERE name = ";
-    public final String sqlSkillcounter = "SELECT skillcount FROM class_skillscount WHERE classid = (SELECT id FROM cl_class WHERE name = ";
+    public final String sqlSkills = "SELECT b.locname FROM class_skills a INNER JOIN cl_skills b ON a.skillid = b.id WHERE classid = ";
+    public final String sqlSkillcounter = "SELECT skillcount FROM class_skillscount WHERE classid = ";
+    public final String sqlPaneCount = "SELECT count(distinct pancounter) AS countOfPans,max(equipvar) AS maxCountofVars FROM class_equip WHERE classid = ?";
+    private String getSqlGetEquipGroup = "SELECT description from class_equip WHERE classid = ? AND pancounter = ?";
+    final String sqlRandomEquipment = "SELECT description FROM class_equip WHERE classid = ? AND equipvar = ? ORDER BY RANDOM() LIMIT 1";
 
-    public final String sqlPaneCnt = "select  count(distinct panCounter) as cnt FROM class_equip where classid = (SELECT id FROM cl_class WHERE name = ";
+
+
+
     public final String sqlEquipment = "select count(distinct equipvar) as equipvar FROM class_equip where classid = (SELECT id FROM cl_class WHERE name =";
     public final String sqlGetEquipVar = "select description from class_equip where classid = (SELECT id FROM cl_class WHERE name =";
-
     public final String sqlGetEquip = "select description from class_equip where classid = (SELECT id FROM cl_class WHERE name =";
 
     /**
@@ -142,38 +134,18 @@ public class NewCharController {
      */
     @FXML
     private void initialize() {
+        Generate g = new Generate();
+        Random rnd = new Random();
+
         countPane.setVisible(false);
         stPane.setVisible(false);
 
-
-
         Image image = new Image("/dnd/resource/img/avatars/ef01.jpg");
+
         imgVw1.setImage(image);
         imgVw2.setImage(image);
 
-        //Выставляем начальные значения
-        strLabel.setText("8");
-        dexLabel.setText("8");
-        conLabel.setText("8");
-        intLabel.setText("8");
-        wisLabel.setText("8");
-        chaLabel.setText("8");
-        strLabel1.setText("8");
-        dexLabel1.setText("8");
-        conLabel1.setText("8");
-        intLabel1.setText("8");
-        wisLabel1.setText("8");
-        chaLabel1.setText("8");
-        strModLabel.setText("-1");
-        dexModLabel.setText("-1");
-        conModLabel.setText("-1");
-        intModLabel.setText("-1");
-        wisModLabel.setText("-1");
-        chaModLabel.setText("-1");
-
-
-
-        //Наполняем списки
+        //Наполняем с писки
         Connect connect = new Connect();
         PreparedStatement ps = connect.getPreparedStatement(sqlRaces);
         PreparedStatement ps1 = connect.getPreparedStatement(sqlClasses);
@@ -313,146 +285,89 @@ public class NewCharController {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 String getClassVal = (String) classChoice.getValue();
-                PreparedStatement ps3 = connect.getPreparedStatement("SELECT description FROM cl_class WHERE name = "
+                PreparedStatement ps3 = connect.getPreparedStatement("SELECT id, description FROM cl_class WHERE name = "
                         + "\"" + getClassVal + "\"");
-                PreparedStatement psSkills = connect.getPreparedStatement(sqlSkills + "\"" + getClassVal + "\");");
-                PreparedStatement psClassCount = connect.getPreparedStatement(sqlSkillcounter + "\"" + getClassVal + "\");");
+                try {
+                    ResultSet rs3 = ps3.executeQuery();
+                    g.setClassid(rs3.getInt("id"));
+                    clTxt.setText(rs3.getString("description"));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    connect.closePrepareStatement(ps3);
+                }
+
+                PreparedStatement psSkills = connect.getPreparedStatement(sqlSkills + g.getClassid());
+                PreparedStatement psClassCount = connect.getPreparedStatement(sqlSkillcounter + g.getClassid() + ";");
+
                 try {
                     ResultSet rsSkills = psSkills.executeQuery();
                     ResultSet rsSkillCount = psClassCount.executeQuery();
-                    ResultSet rs3 = ps3.executeQuery();
-                    clTxt.setText(rs3.getString("description"));
+
                     if (!proficiencyList1.isEmpty()) proficiencyList1.clear();
                     if (!proficiencyList2.isEmpty()) proficiencyList2.clear();
                     while (rsSkills.next()) {
                         proficiencyList1.add(rsSkills.getString("locname"));
                     }
                     profList1.setItems(proficiencyList1);
-                    profCounter.setText(String.valueOf(rsSkillCount.getInt("skillcount")));
+                    skillcnt = rsSkillCount.getInt("skillcount");
+                    profCounter.setText(String.valueOf(skillcnt));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } finally {
                     connect.closePrepareStatement(psSkills);
                     connect.closePrepareStatement(psClassCount);
-                    connect.closePrepareStatement(ps3);
                 }
 
-
-                PreparedStatement psNumOfBoxes = connect.getPreparedStatement(sqlPaneCnt + "\"" + getClassVal + "\");");
-
-                int numOfBoxes;
-                int numOfVars;
+                //Эквипмент
+                PreparedStatement psGetNumbersForEquip = connect.getPreparedStatement(sqlPaneCount);
                 try {
-                    ResultSet rsBoxCount = psNumOfBoxes.executeQuery();
-                    numOfBoxes = rsBoxCount.getInt("cnt");
-                    Pane[] pane = new Pane[numOfBoxes];
-                    ToggleGroup[] equipToggleGroup = new ToggleGroup[numOfBoxes];
-                    String[] equipMassive = new String[numOfBoxes];
-
-                    if (!vbxOuter.getChildren().isEmpty()) vbxOuter.getChildren().clear();
-                    for(int i = 0; i < numOfBoxes; i++) {
-                        PreparedStatement psNumOfVars = connect.getPreparedStatement(sqlEquipment + "\"" + getClassVal + "\")" + " AND panCounter = " + (i+1) +";");
-
-                        try {
-                            ResultSet rsCon = psNumOfVars.executeQuery();
-                            numOfVars = rsCon.getInt("equipvar");
-
-                            //тут создаем и добавляем панель
-                            pane[i] = new Pane();
-                            pane[i].setPrefHeight(60);
-                            pane[i].setPrefWidth(vbxOuter.getPrefWidth() - 20);
-                            pane[i].setLayoutX(vbxOuter.getLayoutX());
-                            pane[i].setLayoutY(i * 30);
-                            vbxOuter.setSpacing(5);
-                            vbxOuter.getChildren().add(pane[i]);
-
-                            RadioButton[] equipRadioButton = new RadioButton[numOfVars];
-
-
-                            //в панель кидаем всякое говно
-                            for (int j = 0; j < numOfVars; j++) {
-                                PreparedStatement psEquipVar = connect.getPreparedStatement(sqlGetEquipVar + "\"" + getClassVal + "\") AND panCounter = " + (i+1) + " AND equipvar = " + (j+1) + ";");
-                                try {
-                                    ResultSet rsEquipVar = psEquipVar.executeQuery();
-                                    equipRadioButton[j] = new RadioButton(rsEquipVar.getString("description"));
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                } finally {
-                                    connect.closePrepareStatement(psEquipVar);
-                                }
-                                pane[i].getChildren().add(equipRadioButton[j]);
-                                equipRadioButton[j].setLayoutX(35);
-                                equipRadioButton[j].setLayoutY(20 * j);
-                                if (equipToggleGroup[i] == null) {
-                                    equipToggleGroup[i] = new ToggleGroup();
-                                }
-                                equipRadioButton[j].setToggleGroup(equipToggleGroup[i]);
-                            }
-
-                            int finalI = i;
-                            equipToggleGroup[i].selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-                                @Override
-                                public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-                                    if (equipToggleGroup[finalI].getSelectedToggle() != null) {
-                                        RadioButton rb = (RadioButton) equipToggleGroup[finalI].getSelectedToggle();
-                                        equipMassive[finalI] = rb.getText();
-                                    }
-                                }
-                            });
-
-
-                            /*ВАРИАНТ С ЧОЙЗБОКСАМИ*/
-/*
-                                ChoiceBox[] equipChoiceBox = new ChoiceBox[numOfBoxes];
-                                ObservableList<String> equipmentObsList = FXCollections.observableArrayList();
-
-                                    PreparedStatement psGetEquip = connect.getPreparedStatement(sqlGetEquip + "\"" + getClassVal + "\") AND panCounter = " + (i+1) + " ORDER BY 1 ;");
-                                    try {
-                                        ResultSet rsGetEquip = psGetEquip.executeQuery();
-                                        System.out.println(rsGetEquip.getString("description"));
-                                        while (rsGetEquip.next()) {
-                                            equipmentObsList.add(rsGetEquip.getString("description"));
-                                        }
-                                    } catch (SQLException e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        connect.closePrepareStatement(psGetEquip);
-                                    }
-
-
-                                if (equipChoiceBox[i] == null) {
-                                    equipChoiceBox[i] = new ChoiceBox();
-                                }
-                                pane[i].getChildren().add(equipChoiceBox[i]);
-                                equipChoiceBox[i].setLayoutX(50);
-                                equipChoiceBox[i].setLayoutY(20);
-                                equipChoiceBox[i].setPrefWidth(250);
-                                equipChoiceBox[i].setPrefHeight(30);
-                                equipChoiceBox[i].setItems(equipmentObsList);
-                                */
-//идем к следующей
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        } finally {
-                            connect.closePrepareStatement(psNumOfVars);
-                        }
-                    }
-
+                    psGetNumbersForEquip.setInt(1,g.getClassid());
+                    ResultSet rsEquipNumbers = psGetNumbersForEquip.executeQuery();
+                    countOfPans = rsEquipNumbers.getInt("countOfPans");
+                    numOfVars = rsEquipNumbers.getInt("maxCountofVars");
                 } catch (SQLException e) {
                     e.printStackTrace();
-                }
-                finally {
-                    connect.closePrepareStatement(psNumOfBoxes);
-                }
-
-                int numberOfInnerBoxes = 3;
-
-                for(int i = 0; i<numberOfInnerBoxes ; i++){
-                    vbxOuter.getChildren().add(new VBox(i+1));
+                } finally {
+                    connect.closePrepareStatement(psGetNumbersForEquip);
                 }
 
-            }
-        });
+                if (!vbxOuter.getChildren().isEmpty()) vbxOuter.getChildren().clear();
+
+                equipmentVariants = new String[countOfPans][numOfVars];
+                equipBox = new ComboBox[countOfPans];
+                equipList = new ObservableList[countOfPans];
+                for (int i = 0; i < countOfPans; i++) {
+                    PreparedStatement psGetEquipGroup = connect.getPreparedStatement(getSqlGetEquipGroup);
+                    try {
+                        psGetEquipGroup.setInt(1,g.getClassid());
+                        psGetEquipGroup.setInt(2,(i+1));
+                        ResultSet rsGetEquipGroup = psGetEquipGroup.executeQuery();
+                        equipBox[i] = new ComboBox<>();
+                        equipList[i] = FXCollections.observableArrayList();
+                        while (rsGetEquipGroup.next()) {
+                            equipList[i].add(rsGetEquipGroup.getString("description"));
+                        }
+                        equipBox[i].setItems(equipList[i]);
+                        equipBox[i].setPrefHeight(30);
+                        equipBox[i].setPrefWidth(vbxOuter.getPrefWidth() - 40);
+                        equipBox[i].setLayoutX(vbxOuter.getLayoutX() + 25);
+                        equipBox[i].setLayoutY(i * 30);
+                        vbxOuter.setSpacing(20);
+                        vbxOuter.getChildren().add(equipBox[i]);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } finally {
+                        connect.closePrepareStatement(psGetEquipGroup);
+                    }
+                }
+
+
+
+}
+});
+
+
 
 
         //Слушатель для бэкграундов
@@ -516,11 +431,6 @@ public class NewCharController {
         cntr.setText(Integer.toString(counter));
         cntr.setVisible(true);
     }
-
-
-
-    //TODO: методы для определения уровня и бонуса мастерства
-    //TODO: начисление хп
 
 
 
@@ -596,6 +506,8 @@ public class NewCharController {
     @FXML
     void Gen() {
         Generate g = new Generate();
+        Random rnd = new Random();
+        Connect connect = new Connect();
 
         strLabel.setText(String.valueOf(g.getStr()));
         dexLabel.setText(String.valueOf(g.getDex()));
@@ -610,7 +522,6 @@ public class NewCharController {
         intModLabel.setText(String.valueOf(g.getIntlMod()));
         wisModLabel.setText(String.valueOf(g.getWisMod()));
         chaModLabel.setText(String.valueOf(g.getChaMod()));
-
         raceChoice.setValue(g.getRaceName());
         subraceChoice.setValue(g.getSubraceName());
         classChoice.setValue(g.getClassname());
@@ -626,12 +537,40 @@ public class NewCharController {
         armorLabel.setText(g.getArmorType());
         weaponLabel.setText(g.getWeaponType());
 
-
         System.out.println(g.getRaceName());
         System.out.println(g.getSubraceName());
         System.out.println(g.getClassname());
         System.out.println(g.getHitDiceName());
         System.out.println(g.getArmorType());
+
+        //todo исправить эту ебанину
+        for (int i = 0; i < equipBox.length; i++) {
+            equipBox[i].setValue((String) equipList[i].get(rnd.nextInt(equipList[i].size())));
+        }
+
+
+        if (!proficiencyList2.isEmpty()) proficiencyList2.clear();
+        for (int i = 0; i < skillcnt; i++) {
+            int o = rnd.nextInt(skillcnt);  //TODO проверить вот эту строчку, походу выбор невелик
+            String sk = proficiencyList1.get(o);
+            proficiencyList2.add(sk);
+            proficiencyList1.remove(o);
+            profList1.setItems(proficiencyList1);
+            profList2.setItems(proficiencyList2);
+            profCounter.setText(String.valueOf(0));
+        }
+
+        skillLabel.setText("");
+        for (int i = 0; i < proficiencyList2.size(); i++) {
+            if (skillLabel.getText().isBlank()) {
+                skillLabel.setText(proficiencyList2.get(i));
+                skillLabel.setText(skillLabel.getText() + ", ");
+            } else if (i == proficiencyList2.size()-1) {
+                skillLabel.setText(skillLabel.getText() + proficiencyList2.get(i));
+            } else {
+                skillLabel.setText(skillLabel.getText() + proficiencyList2.get(i) + ", ");
+            }
+        }
     }
 
     @FXML
@@ -724,18 +663,22 @@ public class NewCharController {
         int a = Integer.parseInt(profCounter.getText());
         if (a > 0) {
             String s = (String) profList1.getSelectionModel().getSelectedItem();
-            proficiencyList2.add(s);
-            proficiencyList1.remove(s);
-            profList1.setItems(proficiencyList1);
-            profList2.setItems(proficiencyList2);
-            a--;
-            profCounter.setText(String.valueOf(a));
-            skillLabel.setText(skillLabel.getText() + ", " + s);
+            if (!s.isBlank()) {
+                proficiencyList2.add(s);
+                proficiencyList1.remove(s);
+                profList1.setItems(proficiencyList1);
+                profList2.setItems(proficiencyList2);
+                a--;
+                profCounter.setText(String.valueOf(a));
+                if (skillLabel.getText().isBlank()) {
+                    skillLabel.setText(s);
+                } else {
+                    skillLabel.setText(skillLabel.getText() + ", " + s);
+                }
+            }
         }
     }
 
-    ///TODO: лайфстайл добавить, физические характеристики (волосы, кожа, глаза, высота, вес, возраст, гендер
-    // TODO: заметки: ORGANIZATIONS, ALLIES, ENEMIES, BACKSTORY, OTHER
     /**
      * ЭКВИП:
      * ЗОЛОТО ИЛИ ЭКВИПМЕНТ
@@ -755,17 +698,16 @@ public class NewCharController {
             profCounter.setText(String.valueOf(a));
 
             skillLabel.setText("");
+
             for (int i = 0; i < proficiencyList2.size(); i++) {
-                if (skillLabel.getText().isEmpty()) {
+                if (skillLabel.getText().isBlank()) {
                     skillLabel.setText(proficiencyList2.get(i));
                     skillLabel.setText(skillLabel.getText() + ", ");
                 }
                 else {
-                    skillLabel.setText(skillLabel.getText() + ", " + proficiencyList2.get(i));
+                    skillLabel.setText(skillLabel.getText() + proficiencyList2.get(i));
                 }
             }
-
-
         }
     }
 

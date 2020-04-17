@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.35" minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="NewCharController">
+<SplitPane dividerPositions="0.35" minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="NewCharController">
     <items>
         <AnchorPane minHeight="600.0" minWidth="400.0">
             <children>
@@ -112,18 +112,18 @@
                                                 <Insets left="45.0" />
                                              </GridPane.margin>
                                           </Button>
-                                          <Label fx:id="strLabel1" text="Label" GridPane.columnIndex="1" />
-                                          <Label fx:id="dexLabel1" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Label fx:id="conLabel1" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <Label fx:id="intLabel1" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Label fx:id="wisLabel1" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                          <Label fx:id="chaLabel1" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                          <Label text="Label" GridPane.columnIndex="3" />
-                                          <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                          <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                          <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                                          <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                                          <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                                          <Label fx:id="strLabel1" text="8" GridPane.columnIndex="1" />
+                                          <Label fx:id="dexLabel1" text="8" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Label fx:id="conLabel1" text="8" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Label fx:id="intLabel1" text="8" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label fx:id="wisLabel1" text="8" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <Label fx:id="chaLabel1" text="8" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <Label text="-1" GridPane.columnIndex="3" />
+                                          <Label text="-1" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                          <Label text="-1" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                          <Label text="-1" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                          <Label text="-1" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                          <Label text="-1" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                                        </children>
                                     </GridPane>
                                     <Separator layoutX="129.0" layoutY="232.0" prefHeight="0.0" prefWidth="229.0" />

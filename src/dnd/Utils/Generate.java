@@ -386,9 +386,18 @@ public class Generate {
         return proficiencyBonus;
     }
 
-    public void setMaxhp(int maxhp) {
-        this.maxhp = maxhp;
-    }
+    public void setMaxhp(int level,int conMod,int hitDice) {
+        /*
+         * 1 уровень - Максимум хитов и модификатор телосложения, все последующие - рандом и модификатор телосложения
+         */
+        int minusLevel = level--;
+        int healthPoints = hitDice + conMod;
+        Random rnd = new Random();
+        for (int i = 0; i < minusLevel; i++) {
+            healthPoints += rnd.nextInt(hitDice+1)*i;
+        }
+        this.maxhp = healthPoints;
+        }
 
     public int getMaxhp() {
         return maxhp;
@@ -410,14 +419,6 @@ public class Generate {
         return alignment;
     }
 
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     */
     private String armorType;
     private String weaponType;
     private String tools;
@@ -446,8 +447,6 @@ public class Generate {
     public String getTools() {
         return tools;
     }
-
-
 
 
     //TODO: доделать генератор персонежей
@@ -484,6 +483,10 @@ public class Generate {
     final String sqlSubraces = "SELECT id,subracename,strbon,dexbon,conbon,intlbon,wisbon,chabon,speed FROM cl_subrace WHERE raceid = ? ORDER BY RANDOM() LIMIT 1";
 
     final String sqlClasses = "SELECT id, name, hitDice, savingThrows FROM cl_class ORDER BY RANDOM() LIMIT 1";
+
+
+
+
 
     //TODO: доделать выбор мировоззрения
     final String sqlAlign = "SELECT alignName FROM cl_alignment WHERE id < 10 ORDER BY RANDOM() LIMIT 1";
@@ -628,10 +631,7 @@ public class Generate {
             c.closePrepareStatement(psAlign);
         }
 
-
-        //Выбираем владение инструментами
-
-
+        //Выбираем стартовый эквип
 
         //Прибавляем бонусы от расы
         int[] boncharstemp = new int[6];  //временный для расчетов
@@ -679,14 +679,14 @@ public class Generate {
             mods[i] = setMod(abilities[i]);
         }
 
-        //уровень -- пока что единичка. Потом доработаем
+        //TODO уровень -- пока что единичка. Потом доработаем
         setLevel(1);
         setHitDiceCount(getLevel());
         setHitDiceName(getHitDice());
         //профбонус
         setProficiencyBonus(setProfBonus(getLevel()));
         //максхп
-        setMaxhp(rnd.nextInt(getHitDice()) + 1 + getDexMod());
+        setMaxhp(getLevel(),getConMod(),getHitDice());
         setSpeed(getSpeed() + getSubraceSpeedbon());
 
         //TODO: хп на следующем уровне 1 хит дайс + модификатор телосложения за каждый уровень после первого
@@ -740,7 +740,5 @@ public class Generate {
         }
         return e;
     }
-
-
-    }
+}
 

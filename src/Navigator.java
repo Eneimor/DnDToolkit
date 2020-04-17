@@ -26,13 +26,13 @@ public class Navigator {
     public static final String GENERATORS = "dnd/view/Generators.fxml";
     public static final String ENCOUNTERS = "dnd/view/Generators.fxml";
     public static final String ENVIRONMENT = "dnd/view/Generators.fxml";
-    public static final String GENERS = "dnd/view/Generators.fxml";
     public static final String SOUNDS = "dnd/view/Generators.fxml";
     public static final String RULES = "dnd/view/Generators.fxml";
     public static final String MISC = "dnd/view/Generators.fxml";
     public static final String NWSPL = "dnd/view/newSpell.fxml";
     public static final String NWBST = "dnd/view/newBeast.fxml";
     public static final String SHWCHARACTER = "dnd/view/showCharacter.fxml";
+    public static final String DUNGGENERATOR = "dnd/view/DungeonGenerator.fxml";
 
     /** Главный контроллер слоев */
     private static MainController mainController;
