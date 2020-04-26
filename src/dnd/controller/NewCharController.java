@@ -11,8 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.sql.PreparedStatement;
@@ -80,6 +79,7 @@ public class NewCharController {
     @FXML private Label profCounter;
     @FXML private Label skillLabel;
     @FXML private VBox vbxOuter;
+    @FXML private GridPane combatGridPane;
 
     private Stage dialogStage;
     private Character character;
@@ -88,11 +88,13 @@ public class NewCharController {
     private int skillcnt;
     private int numOfVars;      //колчество вариантов в одной инвентарной группе
     private int countOfPans;    //количество групп инвентаря
-    private String[][] equipmentVariants; //массив из которого будем брать все значения
+    private String[][] equipmentVariants; //массив в который по хорошему надо класть айдишники
     private ComboBox<String>[] equipBox;
     private ObservableList equipList[];
 
-    //основополагающая переменная для айдишника класса
+    private int combatSkillCount;
+    private Pane[] combatPane;
+    int countofCombatPanes;
 
 
     ObservableList<String> races = FXCollections.observableArrayList();
@@ -104,7 +106,9 @@ public class NewCharController {
     ObservableList<String> abilCh = FXCollections.observableArrayList();
     ObservableList<String> proficiencyList1 = FXCollections.observableArrayList();
     ObservableList<String> proficiencyList2 = FXCollections.observableArrayList();
-    ObservableList<String> equipment = FXCollections.observableArrayList();
+    ObservableList<Integer> combatList = FXCollections.observableArrayList();
+
+
 
     public final String sqlPersTraits = "SELECT description FROM cl_perstraits WHERE backid= ";
     public final String sqlIdeals = "SELECT description FROM cl_ideals WHERE backid = ";
@@ -118,15 +122,7 @@ public class NewCharController {
     public final String sqlSkills = "SELECT b.locname FROM class_skills a INNER JOIN cl_skills b ON a.skillid = b.id WHERE classid = ";
     public final String sqlSkillcounter = "SELECT skillcount FROM class_skillscount WHERE classid = ";
     public final String sqlPaneCount = "SELECT count(distinct pancounter) AS countOfPans,max(equipvar) AS maxCountofVars FROM class_equip WHERE classid = ?";
-    private String getSqlGetEquipGroup = "SELECT description from class_equip WHERE classid = ? AND pancounter = ?";
-    final String sqlRandomEquipment = "SELECT description FROM class_equip WHERE classid = ? AND equipvar = ? ORDER BY RANDOM() LIMIT 1";
-
-
-
-
-    public final String sqlEquipment = "select count(distinct equipvar) as equipvar FROM class_equip where classid = (SELECT id FROM cl_class WHERE name =";
-    public final String sqlGetEquipVar = "select description from class_equip where classid = (SELECT id FROM cl_class WHERE name =";
-    public final String sqlGetEquip = "select description from class_equip where classid = (SELECT id FROM cl_class WHERE name =";
+    public final String getSqlGetEquipGroup = "SELECT description from class_equip WHERE classid = ? AND pancounter = ?";
 
     /**
      * Инициализирует класс-контроллер. Этот метод вызывается автоматически
@@ -135,7 +131,6 @@ public class NewCharController {
     @FXML
     private void initialize() {
         Generate g = new Generate();
-        Random rnd = new Random();
 
         countPane.setVisible(false);
         stPane.setVisible(false);
@@ -156,8 +151,6 @@ public class NewCharController {
             ResultSet rs2 = ps1.executeQuery();
             ResultSet rs3 = ps2.executeQuery();
             ResultSet rs4 = ps3.executeQuery();
-
-
             while (rs1.next()) {
                 races.add(rs1.getString("racename"));
             }
@@ -322,7 +315,7 @@ public class NewCharController {
                 //Эквипмент
                 PreparedStatement psGetNumbersForEquip = connect.getPreparedStatement(sqlPaneCount);
                 try {
-                    psGetNumbersForEquip.setInt(1,g.getClassid());
+                    psGetNumbersForEquip.setInt(1, g.getClassid());
                     ResultSet rsEquipNumbers = psGetNumbersForEquip.executeQuery();
                     countOfPans = rsEquipNumbers.getInt("countOfPans");
                     numOfVars = rsEquipNumbers.getInt("maxCountofVars");
@@ -340,8 +333,8 @@ public class NewCharController {
                 for (int i = 0; i < countOfPans; i++) {
                     PreparedStatement psGetEquipGroup = connect.getPreparedStatement(getSqlGetEquipGroup);
                     try {
-                        psGetEquipGroup.setInt(1,g.getClassid());
-                        psGetEquipGroup.setInt(2,(i+1));
+                        psGetEquipGroup.setInt(1, g.getClassid());
+                        psGetEquipGroup.setInt(2, (i + 1));
                         ResultSet rsGetEquipGroup = psGetEquipGroup.executeQuery();
                         equipBox[i] = new ComboBox<>();
                         equipList[i] = FXCollections.observableArrayList();
@@ -362,13 +355,75 @@ public class NewCharController {
                     }
                 }
 
+                //Боевые скиллы
 
 
-}
+                /*
+                 * инициализируем гридпейн
+                 * инииализируем массив с надписями количество строк * количество колонок - 1
+                 * в цикле добавлем строку в гридпейн и раскладываем по ним надписи
+                 * делаем гридпейн видимым
+                 * */
+
+
+                Label[][] combatLabel;
+                RowConstraints[] combatRow;
+
+
+                int counter;
+                PreparedStatement psCountOfCombatRows = connect.getPreparedStatement("SELECT COUNT(*) as counter FROM class_features " +
+                        "WHERE classid = " + g.getClassid() + " AND lvl <= " + lvlChoice.getValue());
+                PreparedStatement psCombatSkills = connect.getPreparedStatement("SELECT id, featname, lvl, description FROM class_features " +
+                        "WHERE classid = " + g.getClassid() + " AND lvl <= " + lvlChoice.getValue() + " ORDER BY lvl");
+                try {
+                    ResultSet rsCombatCount = psCountOfCombatRows.executeQuery();
+                    ResultSet rsCombatSkills = psCombatSkills.executeQuery();
+                    counter = rsCombatCount.getInt("counter");
+                    combatLabel = new Label[counter][3];
+                    combatRow = new RowConstraints[counter + 1];
+                    combatGridPane.setGridLinesVisible(true);
+
+                    if (!combatList.isEmpty()) combatList.clear();
+                    if (combatGridPane.getRowCount() == 0||combatGridPane.getRowCount() > 1)
+                        {
+                            combatGridPane.getChildren().clear();
+                            combatGridPane.getRowConstraints().add(new RowConstraints(55));
+                            combatGridPane.getColumnConstraints().add(new ColumnConstraints(110));
+                            combatGridPane.getColumnConstraints().add(new ColumnConstraints(110));
+                            combatGridPane.getColumnConstraints().add(new ColumnConstraints(155));
+                            combatGridPane.getColumnConstraints().add(new ColumnConstraints(185));
+                            combatGridPane.setGridLinesVisible(true);
+                            combatGridPane.setColumnIndex(new Label("Name"), 1);
+                            combatGridPane.setColumnIndex(new Label("Level"), 2);
+                            combatGridPane.setColumnIndex(new Label("Description"), 3);
+
+
+                        }
+                    while (rsCombatSkills.next()) {
+                        combatList.add(rsCombatSkills.getInt("id"));
+                        combatRow[rsCombatSkills.getRow() - 1] = new RowConstraints();
+                        combatRow[rsCombatSkills.getRow() - 1].setPrefHeight(55);
+                        combatGridPane.getRowConstraints().add(combatRow[rsCombatSkills.getRow() - 1]);
+
+                        combatLabel[rsCombatSkills.getRow() - 1][0] = new Label(rsCombatSkills.getString("featname"));
+                        combatLabel[rsCombatSkills.getRow() - 1][1] = new Label(rsCombatSkills.getString("lvl"));
+                        combatLabel[rsCombatSkills.getRow() - 1][2] = new Label(rsCombatSkills.getString("description"));
+
+                        combatGridPane.add(combatLabel[rsCombatSkills.getRow() - 1][0], 1, rsCombatSkills.getRow());
+                        combatGridPane.add(combatLabel[rsCombatSkills.getRow() - 1][1], 2, rsCombatSkills.getRow());
+                        combatGridPane.add(combatLabel[rsCombatSkills.getRow() - 1][2], 3, rsCombatSkills.getRow());
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    connect.closePrepareStatement(psCombatSkills);
+                }
+
+
+                combatGridPane.setVisible(true);
+            }
+
 });
-
-
-
 
         //Слушатель для бэкграундов
         backChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -406,9 +461,6 @@ public class NewCharController {
                 idealChoice.setItems(list(psIdeal));
                 bondChoice.setItems(list(psBonds));
                 flawChoice.setItems(list(psFlaws));
-
-
-
             }
         });
 
@@ -543,7 +595,6 @@ public class NewCharController {
         System.out.println(g.getHitDiceName());
         System.out.println(g.getArmorType());
 
-        //todo исправить эту ебанину
         for (int i = 0; i < equipBox.length; i++) {
             equipBox[i].setValue((String) equipList[i].get(rnd.nextInt(equipList[i].size())));
         }
@@ -551,7 +602,7 @@ public class NewCharController {
 
         if (!proficiencyList2.isEmpty()) proficiencyList2.clear();
         for (int i = 0; i < skillcnt; i++) {
-            int o = rnd.nextInt(skillcnt);  //TODO проверить вот эту строчку, походу выбор невелик
+            int o = rnd.nextInt(skillcnt);
             String sk = proficiencyList1.get(o);
             proficiencyList2.add(sk);
             proficiencyList1.remove(o);

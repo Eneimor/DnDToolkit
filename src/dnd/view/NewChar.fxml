@@ -375,7 +375,46 @@
                         </Tab>
                         <Tab closable="false" text="Combat">
                             <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane fx:id="combatGridPane" layoutX="14.0" layoutY="18.0" prefHeight="259.0" prefWidth="547.0" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="109.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0" prefWidth="111.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0" prefWidth="155.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0" prefWidth="182.0" />
+                                </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="45.0" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label text="Name" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets />
+                                       </GridPane.margin>
+                                       <padding>
+                                          <Insets bottom="14.0" left="60.0" right="60.0" top="14.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label text="Level" GridPane.columnIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="30.0" right="15.0" />
+                                       </GridPane.margin>
+                                       <padding>
+                                          <Insets bottom="14.0" left="60.0" right="60.0" top="14.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label text="Description" GridPane.columnIndex="3">
+                                       <padding>
+                                          <Insets bottom="14.0" left="60.0" right="60.0" top="14.0" />
+                                       </padding>
+                                       <GridPane.margin>
+                                          <Insets left="30.0" right="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                 </children>
+                              </GridPane>
+                           </children></AnchorPane>
                             </content>
                         </Tab>
                         <Tab closable="false" text="Profs">

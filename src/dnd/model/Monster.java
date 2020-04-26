@@ -52,11 +52,6 @@ public class Monster {
                    int svInt, int svWis, int svCha,int challenge, int pasPerceprion, String skills, String damVul,
                    String damRes, String damImm, String condImm, String senses, String langs
 
-                   /*
-                   , String st, ,
-                   , , , , ,
-
-                   */
                    ) {
         this.id = new SimpleIntegerProperty(id);
         this.locName = new SimpleStringProperty(locName);
@@ -222,29 +217,4 @@ public class Monster {
     public String getLangs() { return langs.get();}
     public void setLangs(String langs) {this.langs.set(langs);}
     public StringProperty langsProperty() {return langs;}
-
-
-
-
-    /*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    */
-
-
-
 }

@@ -113,7 +113,6 @@ public class Character {
         return name.get();
     }
 
-
     public void setName(String name) {
         this.name.set(name);
     }
